@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>InnerWorld — Every Mind is a World</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root{
+  --deep:#040c1c; --mid:#070f20; --ink:#091526;
+  --gold:#f0c060; --gold2:#ffe08a; --glow:#ffaa20;
+  --mist:#8ab0d4; --ice:#d4e4ff; --white:#f0f4ff;
+  --teal:#40e0d0; --violet:#8050c0; --rose:#ff6080;
+  --glass:rgba(10,20,55,.55); --glass2:rgba(10,22,55,.82);
+  --border:rgba(255,200,80,.25);
+  --shadow:rgba(0,0,0,.55);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --radius:22px; --radius2:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--deep);font-family:'Lora',serif;color:rgba(230,240,255,.9)}
+button,input,textarea{font-family:inherit}
+::-webkit-scrollbar{display:none}
+#app{position:relative;width:100%;height:100%}
+
+/* ── GLOBAL BG ── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 50% 18%,#0e2040 0%,#060f22 45%,#030810 100%);
+  overflow:hidden;
+}
+.bg::before{
+  content:"";position:absolute;inset:-20%;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(120,80,255,.10) 0%,transparent 50%),
+    radial-gradient(circle at 80% 22%,rgba(64,224,208,.10) 0%,transparent 48%),
+    radial-gradient(circle at 50% 78%,rgba(255,170,32,.08) 0%,transparent 58%);
+  filter:blur(18px);
+  animation:slowDrift 14s var(--ease) infinite;
+}
+@keyframes slowDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(2.5%,-1.5%,0) scale(1.05)}}
+.stars,.dust{position:absolute;inset:0;pointer-events:none}
+.star{
+  position:absolute;border-radius:50%;background:#fff;
+  opacity:var(--o,.5);width:var(--s,2px);height:var(--s,2px);
+  animation:twinkle var(--d,3s) ease-in-out infinite var(--dl,0s);
+}
+@keyframes twinkle{0%,100%{transform:scale(1);opacity:var(--o,.25)}50%{transform:scale(1.5);opacity:1}}
+.dustDot{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,224,138,.9),transparent 70%);
+  opacity:0;animation:floatDust var(--fd,8s) ease-in-out infinite var(--dl,0s);
+}
+@keyframes floatDust{0%{opacity:0;transform:translate3d(0,20px,0)}20%{opacity:.75}80%{opacity:.3}100%{opacity:0;transform:translate3d(var(--dx,20px),-160px,0)}}
+
+/* ── SCREEN SYSTEM ── */
+.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column}
+.screen.active{display:flex}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+
+/* ── TEASER ── */
+#teaser{
+  z-index:50;cursor:pointer;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 30%,#0d1e3a 0%,#070f1e 52%,#030810 100%);
+}
+.teaserWrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;transform:translateZ(0)}
+.portal{position:relative;width:280px;height:280px;filter:drop-shadow(0 0 40px rgba(255,180,50,.12))}
+.ringOuter{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,200,80,.28);box-shadow:0 0 80px 30px rgba(255,150,30,.22),0 0 160px 60px rgba(255,120,20,.12);animation:ringPulse 3.4s ease-in-out infinite}
+.ringMid{position:absolute;inset:16px;border-radius:50%;border:1.6px solid rgba(255,210,100,.55);background:radial-gradient(circle,rgba(60,180,180,.10) 0%,transparent 70%);box-shadow:0 0 50px 16px rgba(255,180,50,.22),inset 0 0 80px rgba(60,200,200,.06);animation:ringPulse 3.4s ease-in-out infinite .5s}
+.ringInner{position:absolute;inset:34px;border-radius:50%;background:radial-gradient(circle,rgba(15,40,80,.92) 0%,rgba(10,25,60,.98) 100%);overflow:hidden;border:1px solid rgba(255,200,80,.18)}
+.sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0%,rgba(255,200,80,.75) 6%,transparent 12%,transparent);animation:spin 4.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ringPulse{0%,100%{box-shadow:0 0 80px 30px rgba(255,150,30,.22),0 0 160px 60px rgba(255,120,20,.12)}50%{box-shadow:0 0 110px 40px rgba(255,180,50,.36),0 0 210px 80px rgba(255,140,30,.20)}}
+.teaserChildFig{position:absolute;bottom:14%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tChildHead{width:18px;height:18px;border-radius:50%;background:rgba(255,220,180,.9)}
+.tChildBody{width:14px;height:20px;background:rgba(255,220,180,.8);border-radius:3px;position:relative}
+.tChildGlow{position:absolute;inset:-10px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,80,.45),transparent 60%);animation:childGlow 2s ease-in-out infinite}
+@keyframes childGlow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+.teaserTitle{font-family:'Cinzel Decorative',serif;letter-spacing:5px;font-size:clamp(28px,7vw,40px);font-weight:700;background:linear-gradient(180deg,#fff9e6 0%,#ffe08a 42%,#f0a820 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 28px rgba(255,200,80,.55));opacity:0;transform:translateY(18px);animation:inUp .9s var(--ease) forwards .9s;text-align:center}
+.teaserSub{font-family:'Crimson Text',serif;letter-spacing:2.6px;font-style:italic;font-size:15px;color:rgba(200,220,255,.72);opacity:0;transform:translateY(18px);animation:inUp .9s var(--ease) forwards 1.25s;text-align:center}
+@keyframes inUp{to{opacity:1;transform:translateY(0)}}
+.teaserHint{position:absolute;bottom:38px;left:0;right:0;text-align:center;font-family:'Crimson Text',serif;font-size:13px;letter-spacing:2px;color:rgba(180,200,240,.45);animation:blink 2.1s ease-in-out infinite 2.2s}
+@keyframes blink{0%,100%{opacity:.45}50%{opacity:.95}}
+.teaserLore{margin-top:10px;max-width:420px;padding:10px 16px;border-radius:999px;background:rgba(10,22,55,.35);border:1px solid rgba(255,200,80,.15);color:rgba(200,220,255,.65);font-family:'Crimson Text',serif;font-style:italic;letter-spacing:1px;font-size:13px;opacity:0;animation:fadeIn .9s var(--ease) forwards 1.75s;text-align:center}
+@keyframes fadeIn{to{opacity:1}}
+.dustLayer{position:absolute;inset:0;pointer-events:none}
+.tDust{position:absolute;width:3px;height:3px;border-radius:50%;background:radial-gradient(circle,#ffe08a,transparent);opacity:0;animation:floatDust var(--fd,8s) ease-in-out infinite var(--dl,0s)}
+
+/* ── CHARACTER CREATION ── */
+#charCreate{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;background:rgba(3,8,20,.82);backdrop-filter:blur(14px)}
+#charCreate.active{display:flex}
+.ccCard{
+  width:min(420px,calc(100% - 28px));border-radius:var(--radius2);
+  background:linear-gradient(145deg,rgba(10,22,55,.97) 0%,rgba(6,14,40,.98) 100%);
+  border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow),0 0 60px rgba(255,180,50,.06);
+  padding:26px 22px;animation:panelIn .4s var(--ease);
+}
+@keyframes panelIn{from{opacity:0;transform:scale(.88) translateY(24px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.ccTitle{font-family:'Cinzel',serif;font-size:18px;letter-spacing:3px;color:var(--gold2);text-align:center;text-shadow:0 0 24px rgba(255,200,80,.4);font-weight:700;margin-bottom:4px}
+.ccSub{font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:rgba(180,210,255,.6);letter-spacing:1.5px;text-align:center;margin-bottom:22px}
+.ccLabel{display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(255,200,80,.6);margin-bottom:9px}
+.ccGenderRow{display:flex;gap:10px;margin-bottom:20px}
+.ccGBtn{flex:1;padding:14px 8px;border-radius:16px;border:1.5px solid rgba(255,200,80,.18);background:rgba(10,22,55,.6);cursor:pointer;text-align:center;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;color:rgba(190,215,255,.7);transition:all .22s}
+.ccGBtn .gIcon{display:block;font-size:28px;margin-bottom:5px}
+.ccGBtn.active,.ccGBtn:hover{border-color:rgba(255,200,80,.6);background:rgba(255,200,80,.08);color:var(--gold2)}
+.ccInput{width:100%;padding:13px 16px;border-radius:14px;border:1px solid rgba(255,200,80,.18);background:rgba(5,12,35,.8);color:rgba(215,235,255,.9);font-size:15px;outline:none;transition:border-color .25s;margin-bottom:20px}
+.ccInput:focus{border-color:rgba(255,200,80,.45)}
+.ccInput::placeholder{color:rgba(120,150,200,.4);font-style:italic}
+.primaryBtn{width:100%;border-radius:999px;padding:16px 18px;border:1.5px solid rgba(255,200,80,.5);background:linear-gradient(135deg,rgba(20,45,90,.95),rgba(10,25,60,.98));color:rgba(255,224,138,.95);box-shadow:0 0 34px rgba(255,180,50,.18),inset 0 1px 0 rgba(255,220,120,.10);font-family:'Cinzel',serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.primaryBtn:hover{box-shadow:0 0 48px rgba(255,180,50,.3)}
+.primaryBtn:active{transform:scale(.97)}
+.secondaryBtn{width:100%;border-radius:999px;padding:14px 18px;background:rgba(10,20,50,.55);color:rgba(180,210,255,.85);border:1px solid rgba(150,180,255,.22);font-family:'Cinzel',serif;font-size:15px;letter-spacing:1.6px;cursor:pointer;margin-top:10px;transition:all .2s}
+.secondaryBtn:active{transform:scale(.97)}
+
+/* ── ENTRANCE ── */
+#entrance{z-index:40;overflow:hidden}
+.entTop{position:relative;z-index:2;padding:18px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.iconBtn{width:42px;height:42px;border-radius:14px;background:rgba(10,22,55,.65);border:1px solid rgba(255,200,80,.20);display:flex;align-items:center;justify-content:center;color:rgba(255,220,100,.85);cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 12px 30px rgba(0,0,0,.25);transition:transform .18s var(--ease),background .18s,border-color .18s}
+.iconBtn:active{transform:scale(.95)}
+.iconBtn:hover{background:rgba(255,200,80,.08);border-color:rgba(255,200,80,.35)}
+.portalScene{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.portalWrap{position:relative;width:300px;height:300px;animation:floaty 6.5s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.entRing{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 90deg,rgba(255,200,60,.88),rgba(255,140,20,.58),rgba(60,200,180,.38),rgba(255,200,60,.88)) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;box-shadow:0 0 90px 30px rgba(255,170,40,.30),0 0 170px 70px rgba(255,130,20,.14)}
+.entInner{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,#0d2540 0%,#081530 60%,#040c20 100%);overflow:hidden}
+.entNebula{position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(ellipse,rgba(60,160,200,.14) 0%,transparent 70%);animation:neb 8.5s ease-in-out infinite}
+@keyframes neb{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.10) rotate(12deg)}}
+.entSweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0%,rgba(255,200,80,.60) 6%,transparent 12%,transparent);animation:spin 5.2s linear infinite}
+.bottomGlow{position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);width:220px;height:90px;background:radial-gradient(ellipse,rgba(255,180,50,.35) 0%,transparent 70%);filter:blur(18px)}
+.brandBlock{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;width:calc(100% - 40px);pointer-events:none}
+.brandTitle{font-family:'Cinzel Decorative',serif;font-weight:700;letter-spacing:3px;font-size:clamp(32px,8vw,46px);line-height:1.02;background:linear-gradient(180deg,#fff9e6 0%,#ffe08a 42%,#f0a820 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(255,200,80,.45))}
+.brandSub{margin-top:8px;font-family:'Crimson Text',serif;font-style:italic;letter-spacing:2px;font-size:15px;color:rgba(200,220,255,.74)}
+.brandExplain{margin:12px auto 0;max-width:420px;font-family:'Lora',serif;font-size:13.5px;line-height:1.6;color:rgba(200,220,255,.65)}
+.land{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:2;pointer-events:none}
+.water{position:absolute;left:0;right:0;bottom:0;height:82px;background:linear-gradient(to bottom,rgba(20,60,120,.38),rgba(10,30,70,.75))}
+.water::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0px,rgba(255,200,80,.05) 2px,transparent 4px);animation:shimmer 3.2s linear infinite}
+@keyframes shimmer{from{background-position:0 0}to{background-position:70px 0}}
+.mist{position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(to top,rgba(10,20,60,.55) 0%,transparent 100%)}
+.cliffL,.cliffR{position:absolute;bottom:66px;height:108px;background:linear-gradient(135deg,#1a2540 0%,#0d1a35 100%);border-top:1px solid rgba(255,200,80,.10)}
+.cliffL{left:0;width:38%;clip-path:polygon(0 100%,100% 100%,100% 30%,80% 0,0 0)}
+.cliffR{right:0;width:38%;clip-path:polygon(0 30%,20% 0,100% 0,100% 100%,0 100%)}
+.ctaArea{position:relative;z-index:5;width:100%;padding:0 18px 22px;display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.quickRow{display:flex;gap:10px}
+.pill{flex:1;background:rgba(10,22,55,.55);border:1px solid rgba(100,140,255,.22);border-radius:18px;padding:10px 12px;color:rgba(200,220,255,.7);font-family:'Crimson Text',serif;font-size:12.5px;letter-spacing:.6px;backdrop-filter:blur(8px)}
+.pill b{display:block;font-family:'Cinzel',serif;color:rgba(255,220,100,.9);letter-spacing:1px;font-size:11px;margin-bottom:2px}
+.entSparkles{position:absolute;inset:0;pointer-events:none}
+.eSpark{position:absolute;border-radius:50%;animation:sparkA var(--sd,3s) ease-in-out infinite var(--sdl,0s);opacity:0}
+@keyframes sparkA{0%,100%{opacity:0;transform:scale(0)}40%,60%{opacity:1;transform:scale(1)}}
+
+/* ── ONBOARDING / INTRO ── */
+#onboarding{z-index:45;background:rgba(3,8,20,.80);backdrop-filter:blur(14px)}
+.onbCard{width:min(430px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow),0 0 60px rgba(255,180,50,.06);padding:24px 22px;position:relative;overflow:hidden}
+.onbTop{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.onbTitle{font-family:'Cinzel',serif;letter-spacing:2px;color:rgba(255,220,100,.92);font-weight:700;font-size:13px}
+.onbSkip{background:transparent;border:1px solid rgba(150,180,255,.18);color:rgba(170,200,255,.65);border-radius:999px;padding:7px 13px;cursor:pointer;font-family:'Crimson Text',serif;letter-spacing:1px;font-size:13px;transition:all .2s}
+.onbSkip:hover{color:rgba(200,220,255,.9)}
+.slideIcon{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:10px 0 14px;border:1px solid rgba(255,200,80,.18);background:rgba(10,22,55,.55);box-shadow:0 0 32px rgba(255,180,50,.08);font-size:26px}
+.slideH{font-family:'Cinzel',serif;font-size:19px;letter-spacing:1px;color:rgba(240,244,255,.96)}
+.slideP{margin-top:9px;font-size:14px;line-height:1.75;color:rgba(200,220,255,.72)}
+.slideP em{color:var(--gold2);font-style:normal}
+.whisper{margin-top:12px;padding:10px 13px;border-radius:16px;background:rgba(10,22,55,.55);border:1px solid rgba(100,140,255,.18);color:rgba(190,215,255,.72);font-family:'Crimson Text',serif;font-style:italic;letter-spacing:.6px;font-size:13px}
+/* controls preview inside onboarding */
+.ctrlPreview{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ctrlTag{background:rgba(8,18,50,.85);border:1px solid rgba(255,200,80,.22);border-radius:12px;padding:7px 12px;display:flex;align-items:center;gap:7px;font-family:'Crimson Text',serif;font-size:12px;color:rgba(190,215,255,.75)}
+.ctrlK{background:rgba(255,200,80,.14);border:1px solid rgba(255,200,80,.32);border-radius:5px;padding:2px 8px;font-family:'Cinzel',serif;font-size:10px;color:rgba(255,220,100,.95)}
+.progressDots{display:flex;gap:8px;margin-top:16px}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(160,200,255,.18);border:1px solid rgba(160,200,255,.16);transition:all .28s var(--ease)}
+.dot.active{background:rgba(255,200,80,.70);border-color:rgba(255,200,80,.35);box-shadow:0 0 16px rgba(255,180,50,.22);width:20px}
+.onbActions{display:flex;gap:10px;margin-top:16px}
+.onbBtn{flex:1;border-radius:999px;padding:14px;cursor:pointer;border:none;font-family:'Cinzel',serif;letter-spacing:1.4px;font-size:13px;transition:all .2s}
+.onbPrev{background:rgba(10,20,50,.55);border:1px solid rgba(150,180,255,.20);color:rgba(190,215,255,.78)}
+.onbNext{background:linear-gradient(135deg,rgba(255,180,50,.12),rgba(180,100,20,.10));border:1.5px solid rgba(255,200,80,.40);color:rgba(255,224,138,.95);box-shadow:0 0 26px rgba(255,180,50,.16)}
+.onbNext:hover{box-shadow:0 0 38px rgba(255,180,50,.28)}
+.onbNext:active{transform:scale(.97)}
+
+/* ── MODAL BASE ── */
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:rgba(3,8,25,.82);backdrop-filter:blur(14px)}
+.modal.active{display:flex}
+.panel{width:min(440px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow);padding:20px 18px;animation:panelIn .38s var(--ease)}
+.panelHeader{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.panelHeader h3{font-family:'Cinzel',serif;font-size:15px;letter-spacing:2px;color:rgba(255,220,100,.92)}
+.closeBtn{width:40px;height:40px;border-radius:14px;border:1px solid rgba(150,180,255,.18);background:rgba(10,22,55,.50);color:rgba(190,215,255,.75);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s}
+.closeBtn:hover{background:rgba(255,200,80,.08);color:rgba(255,220,100,.9)}
+.miniNote{font-size:12.5px;line-height:1.6;color:rgba(180,210,255,.62);font-family:'Crimson Text',serif;letter-spacing:.6px;margin-top:8px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-radius:16px;background:rgba(10,22,55,.45);border:1px solid rgba(100,140,255,.16);margin-bottom:10px}
+.row label{font-family:'Crimson Text',serif;letter-spacing:1px;color:rgba(200,220,255,.72)}
+.switch{width:52px;height:30px;border-radius:999px;border:1px solid rgba(255,200,80,.22);background:rgba(10,20,50,.55);position:relative;cursor:pointer;transition:background .2s}
+.knob{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:999px;background:rgba(255,220,100,.88);box-shadow:0 0 18px rgba(255,180,50,.18);transition:left .18s var(--ease),background .18s}
+.switch.on .knob{left:26px;background:rgba(64,224,208,.85);box-shadow:0 0 18px rgba(64,224,208,.18)}
+
+/* ── MEMORY MODAL ── */
+#memoryModal.modal{align-items:center}
+.card{width:min(440px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow),0 0 60px rgba(255,180,50,.06);padding:20px 18px;max-height:90vh;overflow-y:auto;animation:panelIn .38s var(--ease)}
+.card h3{font-family:'Cinzel',serif;font-size:16px;letter-spacing:2.6px;color:rgba(255,220,100,.92);text-align:center;text-shadow:0 0 20px rgba(255,200,80,.22)}
+.cardSub{margin-top:6px;text-align:center;font-family:'Crimson Text',serif;font-style:italic;letter-spacing:1px;color:rgba(170,200,255,.55);font-size:13px;margin-bottom:2px}
+.field{margin-top:14px}
+.field label{display:block;font-family:'Crimson Text',serif;letter-spacing:2px;text-transform:uppercase;font-size:11px;color:rgba(180,210,255,.62);margin:0 0 6px}
+.field input,.field textarea{width:100%;border-radius:14px;border:1px solid rgba(100,140,255,.18);background:rgba(5,15,45,.78);color:rgba(220,235,255,.92);padding:12px 14px;outline:none;font-size:15px}
+.field textarea{min-height:100px;resize:none;line-height:1.65}
+.field input::placeholder,.field textarea::placeholder{color:rgba(120,150,220,.35);font-style:italic}
+.field input:focus,.field textarea:focus{border-color:rgba(255,200,80,.35);box-shadow:0 0 24px rgba(255,180,50,.10)}
+/* story types */
+.stypeRow{display:flex;gap:7px;flex-wrap:wrap}
+.stypeBtn{flex:1;min-width:68px;padding:8px 6px;border-radius:10px;border:1px solid rgba(150,180,255,.18);background:rgba(10,22,55,.6);cursor:pointer;text-align:center;font-family:'Lora',serif;font-size:12px;color:rgba(180,210,255,.65);transition:all .22s}
+.stypeBtn .sico{display:block;font-size:17px;margin-bottom:2px}
+.stypeBtn.active,.stypeBtn:hover{border-color:rgba(255,200,80,.5);background:rgba(255,200,80,.08);color:var(--gold2)}
+/* emotion grid 4-col */
+.emGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.emBtn{border-radius:12px;padding:10px 6px;background:rgba(10,20,60,.65);border:1.5px solid rgba(80,110,200,.18);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:rgba(170,200,255,.74);font-family:'Crimson Text',serif;font-size:11px;transition:all .15s}
+.emBtn .ico{font-size:19px}
+.emBtn.active{border-width:2px}
+.emBtn[data-e="joy"].active{background:rgba(255,200,50,.15);border-color:#ffc830;color:#ffd060}
+.emBtn[data-e="sadness"].active{background:rgba(60,120,220,.15);border-color:#4080dc;color:#80b0ff}
+.emBtn[data-e="fear"].active{background:rgba(120,50,200,.15);border-color:#8050c8;color:#b080ff}
+.emBtn[data-e="hope"].active{background:rgba(60,200,120,.15);border-color:#40c880;color:#70e8a0}
+.emBtn[data-e="curiosity"].active{background:rgba(255,140,50,.15);border-color:#ff8030;color:#ffa060}
+.emBtn[data-e="love"].active{background:rgba(255,90,130,.15);border-color:#ff6090;color:#ff90b0}
+.emBtn[data-e="anger"].active{background:rgba(255,60,30,.15);border-color:#ff4020;color:#ff7040}
+.emBtn[data-e="wonder"].active{background:rgba(100,180,255,.15);border-color:#80c0ff;color:#a0d0ff}
+.metaRow{margin-top:12px;display:flex;gap:10px}
+.chip{flex:1;border-radius:14px;padding:10px;background:rgba(10,22,55,.55);border:1px solid rgba(100,140,255,.18);color:rgba(180,210,255,.72);font-family:'Crimson Text',serif;font-size:12.5px}
+.chip b{display:block;font-family:'Cinzel',serif;color:rgba(255,220,100,.9);letter-spacing:1px;font-size:11px;margin-bottom:2px}
+.actionBtn{width:100%;margin-top:14px;padding:14px;border-radius:16px;cursor:pointer;border:1.5px solid rgba(255,200,80,.40);background:linear-gradient(135deg,rgba(255,180,50,.15),rgba(180,100,20,.10));color:rgba(255,224,138,.96);font-family:'Cinzel',serif;letter-spacing:1.6px;box-shadow:0 0 28px rgba(255,180,50,.12);transition:all .2s;font-size:15px}
+.actionBtn:hover{box-shadow:0 0 42px rgba(255,180,50,.22)}
+.actionBtn:active{transform:scale(.97)}
+.cancelBtn{width:100%;margin-top:10px;padding:12px;border-radius:16px;cursor:pointer;border:1px solid rgba(150,180,255,.15);background:transparent;color:rgba(160,190,255,.55);font-family:'Crimson Text',serif;letter-spacing:1px;font-size:14px}
+
+/* ── READ SHEET ── */
+#readModal.modal{align-items:flex-end;justify-content:center;pointer-events:auto}
+.readSheet{width:min(460px,calc(100% - 28px));margin-bottom:100px;border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 -24px 70px var(--shadow),0 0 48px rgba(255,180,50,.06);padding:18px 16px;animation:sheetUp .35s var(--ease)}
+@keyframes sheetUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.emBar{height:3px;border-radius:3px;opacity:.75;margin-bottom:12px}
+.readH{font-family:'Cinzel',serif;font-size:16px;letter-spacing:2px;color:rgba(255,220,100,.92)}
+.readMeta{display:flex;align-items:center;gap:10px;margin-top:8px}
+.tag{display:inline-block;padding:4px 12px;border-radius:999px;font-family:'Crimson Text',serif;letter-spacing:2px;text-transform:uppercase;font-size:11px;background:rgba(10,22,55,.55);border:1px solid rgba(150,180,255,.18);color:rgba(190,215,255,.72)}
+.readType{font-family:'Crimson Text',serif;font-size:12px;color:rgba(160,190,255,.55);font-style:italic}
+.readText{margin-top:12px;font-size:15px;line-height:1.8;font-style:italic;color:rgba(200,220,255,.86)}
+.readClose{margin-top:14px;width:100%;padding:12px;border-radius:14px;cursor:pointer;border:1px solid rgba(255,200,80,.20);background:rgba(255,200,80,.08);font-family:'Cinzel',serif;letter-spacing:1.8px;color:rgba(255,220,100,.82);transition:all .2s}
+.readClose:hover{background:rgba(255,200,80,.15);color:var(--gold2)}
+
+/* ── WORLD MAP MODAL ── */
+.mapWrap{width:min(520px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow);padding:16px 14px;animation:panelIn .38s var(--ease)}
+.mapLegend{display:flex;gap:10px;flex-wrap:wrap;font-family:'Crimson Text',serif;font-size:12px;color:rgba(180,210,255,.70);margin-top:8px}
+.legendDot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+.mapCanvas{margin-top:10px;width:100%;height:280px;border-radius:18px;background:radial-gradient(circle at 50% 20%,rgba(60,160,200,.10),transparent 55%),radial-gradient(circle at 70% 70%,rgba(255,200,80,.08),transparent 60%),rgba(5,15,45,.65);border:1px solid rgba(100,140,255,.18);position:relative;overflow:hidden}
+.mnode{position:absolute;width:13px;height:13px;border-radius:50%;background:rgba(255,220,100,.85);box-shadow:0 0 18px rgba(255,180,50,.25);transform:translate(-50%,-50%);transition:box-shadow .3s}
+.mnode.locked{background:rgba(160,200,255,.18);box-shadow:none;border:1px dashed rgba(160,200,255,.25)}
+.mnode.hint{background:#40e0d0;box-shadow:0 0 18px rgba(64,224,208,.25)}
+.mpath{position:absolute;height:2px;background:rgba(255,220,100,.25);transform-origin:left center;opacity:.8}
+.mpath.locked{background:rgba(160,200,255,.12);opacity:.5}
+.nodeLabel{position:absolute;transform:translate(-50%,calc(-50% - 16px));font-family:'Crimson Text',serif;font-size:11.5px;letter-spacing:.6px;color:rgba(200,220,255,.75);white-space:nowrap}
+
+/* ── JOURNAL MODAL ── */
+.archiveWrap{width:min(520px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(10,22,55,.97),rgba(6,14,40,.98));border:1px solid var(--border);box-shadow:0 28px 90px var(--shadow);padding:16px 14px;animation:panelIn .38s var(--ease)}
+.archiveList{margin-top:10px;max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.jItem{padding:12px;border-radius:18px;background:rgba(10,22,55,.55);border:1px solid rgba(100,140,255,.16);cursor:pointer;transition:border-color .2s}
+.jItem:hover{border-color:rgba(255,200,80,.3)}
+.jItem .jt{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.2px;color:rgba(255,220,100,.9)}
+.jItem .jm{margin-top:5px;font-family:'Crimson Text',serif;color:rgba(190,215,255,.70);font-size:12.5px;letter-spacing:.4px;line-height:1.45}
+.jItem .je{margin-top:7px;display:inline-block;padding:3px 10px;border-radius:999px;font-family:'Crimson Text',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid rgba(150,180,255,.18);color:rgba(190,215,255,.75)}
+
+/* ── HUD ── */
+#hud{position:fixed;inset:0;z-index:30;pointer-events:none;display:none}
+#hud.active{display:block}
+.hudTop{position:absolute;left:0;right:0;top:0;padding:14px 14px 0;background:linear-gradient(to bottom,rgba(3,8,20,.88) 0%,transparent 100%)}
+.hudRow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brandMini{font-family:'Cinzel Decorative',serif;font-size:11px;letter-spacing:3px;color:rgba(255,210,100,.78);text-shadow:0 0 18px rgba(255,180,50,.30)}
+.badges{display:flex;gap:7px;align-items:center}
+.badge{padding:5px 10px;border-radius:999px;background:rgba(10,25,60,.78);border:1px solid rgba(255,200,80,.22);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;color:rgba(255,200,80,.78)}
+.counter{padding:5px 10px;border-radius:999px;background:rgba(10,25,60,.45);border:1px solid rgba(150,180,255,.18);font-family:'Crimson Text',serif;font-size:12px;letter-spacing:1px;color:rgba(180,210,255,.72)}
+/* region + weather sub-row */
+.hudSub{display:flex;align-items:center;justify-content:space-between;margin-top:6px;opacity:.0;transition:opacity .5s}
+.hudSub.visible{opacity:1}
+.regionPill{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(200,220,255,.65);background:rgba(5,12,35,.75);border:1px solid rgba(150,180,255,.18);border-radius:999px;padding:4px 12px}
+.weatherPill{font-family:'Crimson Text',serif;font-size:11.5px;color:rgba(180,210,255,.65);display:flex;align-items:center;gap:5px}
+.hudBottom{position:absolute;left:0;right:0;bottom:0;padding:0 14px 16px;background:linear-gradient(to top,rgba(3,8,20,.90) 0%,transparent 100%)}
+.hintBar{display:flex;gap:9px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hint{padding:5px 11px;border-radius:999px;background:rgba(10,22,55,.68);border:1px solid rgba(100,140,255,.18);color:rgba(180,210,255,.72);font-family:'Crimson Text',serif;font-size:11.5px;letter-spacing:.8px;backdrop-filter:blur(10px)}
+.hint .k{display:inline-block;padding:1px 7px;border-radius:5px;margin-right:5px;background:rgba(255,200,80,.14);border:1px solid rgba(255,200,80,.22);color:rgba(255,220,100,.92);font-family:'Cinzel',serif;font-size:10.5px}
+/* inner child panel */
+.icPanel{position:absolute;bottom:72px;right:13px;background:rgba(5,12,35,.90);border:1px solid rgba(255,200,80,.20);border-radius:20px;padding:13px 14px;backdrop-filter:blur(10px);pointer-events:auto;min-width:110px;box-shadow:0 8px 30px var(--shadow),0 0 20px rgba(255,180,50,.06)}
+.icName{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:2px;color:rgba(255,200,80,.7);text-align:center;margin-bottom:8px}
+.icAvatar{width:56px;height:56px;margin:0 auto 8px;border-radius:50%;overflow:hidden;background:rgba(10,22,55,.9)}
+.icAvatar canvas{width:56px!important;height:56px!important}
+.icBar{height:4px;background:rgba(255,255,255,.10);border-radius:2px;overflow:hidden}
+.icFill{height:100%;border-radius:2px;background:linear-gradient(90deg,#40c880,#f0c060);transition:width .8s var(--ease)}
+.icLbl{font-family:'Crimson Text',serif;font-size:10px;font-style:italic;color:rgba(180,210,255,.55);text-align:center;margin-top:4px;letter-spacing:1px}
+/* side quick buttons */
+.sideStack{position:fixed;right:12px;top:64px;z-index:35;display:flex;flex-direction:column;gap:9px;pointer-events:auto}
+.sideBtn{width:44px;height:44px;border-radius:15px;background:rgba(10,22,55,.70);border:1px solid rgba(255,200,80,.20);backdrop-filter:blur(10px);color:rgba(255,220,100,.85);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 35px rgba(0,0,0,.28);transition:transform .18s var(--ease),background .18s,border-color .18s;font-size:17px}
+.sideBtn.sm{border-color:rgba(150,180,255,.18);color:rgba(190,215,255,.78);font-size:15px}
+.sideBtn:active{transform:scale(.93)}
+.sideBtn:hover{background:rgba(255,200,80,.08);border-color:rgba(255,200,80,.35)}
+
+/* ── JOYSTICK ── */
+#joystickZone{position:fixed;left:14px;bottom:88px;z-index:36;pointer-events:auto;display:none}
+#joyBase{width:106px;height:106px;border-radius:50%;background:rgba(10,20,60,.52);border:1.5px solid rgba(255,200,80,.18);backdrop-filter:blur(8px);position:relative;touch-action:none;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+#joyThumb{width:40px;height:40px;border-radius:50%;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,200,80,.42),rgba(255,150,30,.18));border:1.5px solid rgba(255,200,80,.45);box-shadow:0 0 18px rgba(255,180,50,.28);pointer-events:none;transition:transform .05s}
+#mobileActions{position:fixed;right:14px;bottom:88px;z-index:36;display:none;flex-direction:column;gap:11px;pointer-events:auto}
+.mobBtn{width:58px;height:58px;border-radius:18px;border:none;outline:none;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;font-weight:700;transition:transform .15s var(--ease);box-shadow:0 18px 40px rgba(0,0,0,.28);font-size:20px}
+.mobBtn:active{transform:scale(.92)}
+#actWrite{background:radial-gradient(135deg,rgba(255,180,50,.28),rgba(20,40,100,.92));border:1.6px solid rgba(255,200,80,.45);color:rgba(255,224,138,.98)}
+#actRead{background:radial-gradient(135deg,rgba(100,160,255,.24),rgba(15,30,80,.92));border:1.6px solid rgba(150,180,255,.30);color:rgba(190,215,255,.9);display:none}
+
+/* ── DAILY REFLECTION ── */
+#dailyPrompt.modal{z-index:90}
+.dpPanel{width:min(400px,calc(100% - 28px));border-radius:var(--radius2);background:linear-gradient(145deg,rgba(8,18,48,.97),rgba(5,12,32,.99));border:1px solid rgba(180,120,255,.3);box-shadow:0 20px 80px var(--shadow),0 0 60px rgba(180,100,255,.06);padding:30px 26px;animation:panelIn .4s var(--ease)}
+.dpIcon{font-size:36px;text-align:center;margin-bottom:14px}
+.dpTitle{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:rgba(200,160,255,.8);text-align:center;margin-bottom:18px}
+.dpQ{font-family:'Lora',serif;font-size:16px;line-height:1.75;color:rgba(220,235,255,.9);font-style:italic;text-align:center;margin-bottom:20px}
+.dpDismiss{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(180,120,255,.3);background:rgba(100,60,180,.1);font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:rgba(200,160,255,.8);cursor:pointer;transition:all .2s}
+.dpDismiss:hover{background:rgba(100,60,180,.2)}
+
+/* ── TOAST ── */
+#toast{position:fixed;top:78px;left:50%;transform:translateX(-50%) translateY(-18px);z-index:120;opacity:0;pointer-events:none;transition:all .38s var(--ease)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toastInner{padding:10px 20px;border-radius:999px;background:rgba(10,22,55,.92);border:1px solid rgba(255,200,80,.25);color:rgba(220,235,255,.92);font-family:'Crimson Text',serif;font-style:italic;letter-spacing:.8px;font-size:14px;box-shadow:0 18px 50px rgba(0,0,0,.35),0 0 22px rgba(255,180,50,.08);white-space:nowrap}
+
+/* ── GAME ── */
+#gameScreen{z-index:20}
+#gameScreen.active{display:block}
+#gameCanvas{width:100%;height:100%;display:block}
+
+/* ── REDUCE MOTION ── */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+@media (max-width:380px){
+  .brandTitle{font-size:36px}
+  .portalWrap{width:270px;height:270px}
+  .emGrid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- BG -->
+<div class="bg" id="bg"><div class="stars" id="stars"></div><div class="dust" id="dust"></div></div>
+
+<!-- TEASER -->
+<section class="screen active" id="teaser" aria-label="Teaser">
+  <div class="center teaserWrap">
+    <div class="portal" aria-hidden="true">
+      <div class="ringOuter"></div>
+      <div class="ringMid"><div class="ringInner" id="innerStarNest"></div></div>
+      <div class="sweep"></div>
+      <div class="teaserChildFig">
+        <div class="tChildHead"></div>
+        <div class="tChildBody"><div class="tChildGlow"></div></div>
+      </div>
+    </div>
+    <div class="teaserTitle">INNERWORLD</div>
+    <div class="teaserSub">Every mind is a world.</div>
+    <div class="teaserLore" id="teaserLore">"Some doors only appear after you speak."</div>
+  </div>
+  <div class="dustLayer" id="teaserDust"></div>
+  <div class="teaserHint">tap to enter</div>
+</section>
+
+<!-- ENTRANCE -->
+<section class="screen" id="entrance" aria-label="Entrance">
+  <div class="entTop">
+    <button class="iconBtn" id="btnAbout" title="About" aria-label="About">☾</button>
+    <button class="iconBtn" id="btnSettings" title="Settings" aria-label="Settings">⚙</button>
+  </div>
+  <div class="portalScene" aria-hidden="true">
+    <div class="portalWrap">
+      <div class="entRing"></div>
+      <div class="entInner"><div class="entNebula"></div><div class="entSweep"></div></div>
+      <div class="bottomGlow"></div>
+    </div>
+  </div>
+  <div class="brandBlock">
+    <div class="brandTitle">INNERWORLD</div>
+    <div class="brandSub">Build the worlds inside your mind.</div>
+    <div class="brandExplain">Start with a small inner child. Share fragments of your story — your world expands, and your character evolves.</div>
+  </div>
+  <div class="land" aria-hidden="true">
+    <div class="cliffL"></div><div class="cliffR"></div>
+    <div class="water"></div><div class="mist"></div>
+  </div>
+  <div class="ctaArea">
+    <div class="quickRow">
+      <div class="pill"><b>How it works</b>Explore → Write → World grows</div>
+      <div class="pill"><b>Mystery</b>Hidden doors &amp; easter eggs</div>
+    </div>
+    <button class="primaryBtn" id="btnStart">✦ Begin Journey</button>
+    <button class="secondaryBtn" id="btnContinue" style="display:none">↩ Continue Journey</button>
+  </div>
+  <div class="entSparkles" id="entSparkles"></div>
+</section>
+
+<!-- CHARACTER CREATION -->
+<div id="charCreate" aria-label="Character Creation">
+  <div class="ccCard">
+    <div class="ccTitle">YOUR INNER CHILD</div>
+    <div class="ccSub">Who walks within your world?</div>
+    <span class="ccLabel">CHOOSE YOUR FORM</span>
+    <div class="ccGenderRow">
+      <div class="ccGBtn active" id="genderBoy" onclick="selectGender('boy')"><span class="gIcon">🌟</span>Boy</div>
+      <div class="ccGBtn" id="genderGirl" onclick="selectGender('girl')"><span class="gIcon">✨</span>Girl</div>
+      <div class="ccGBtn" id="genderSpirit" onclick="selectGender('spirit')"><span class="gIcon">🌙</span>Spirit</div>
+    </div>
+    <span class="ccLabel">NAME YOUR INNER CHILD</span>
+    <input class="ccInput" type="text" id="childName" placeholder="What do they call you inside?" maxlength="20">
+    <button class="primaryBtn" id="ccEnterBtn">✦ Enter Your World ✦</button>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<section class="screen" id="onboarding" aria-label="Onboarding">
+  <div class="center">
+    <div class="onbCard">
+      <div class="onbTop">
+        <div class="onbTitle" id="onbChapter">CHAPTER I</div>
+        <button class="onbSkip" id="onbSkip">Skip</button>
+      </div>
+      <div class="slideIcon" id="slideIcon">🗝</div>
+      <div class="slideH" id="slideH">You are entering a mind.</div>
+      <div class="slideP" id="slideP">This world reacts to what you share. No one is judging. Only you — and the doors you choose to open.</div>
+      <div class="whisper" id="slideWhisper">"Say one true thing… and watch the sky change."</div>
+      <div id="slideExtra"></div>
+      <div class="progressDots" id="onbDots"></div>
+      <div class="onbActions">
+        <button class="onbBtn onbPrev" id="onbPrev">Back</button>
+        <button class="onbBtn onbNext" id="onbNext">Next</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAME -->
+<div id="gameScreen" class="screen" aria-label="Game"><canvas id="gameCanvas"></canvas></div>
+
+<!-- HUD -->
+<div id="hud" aria-label="HUD">
+  <div class="hudTop">
+    <div class="hudRow">
+      <div class="brandMini">INNERWORLD</div>
+      <div class="badges">
+        <div class="badge" id="stageBadge">Stage I · Seed</div>
+        <div class="counter" id="memCount">0 memories</div>
+      </div>
+    </div>
+    <div class="hudSub" id="hudSub">
+      <div class="regionPill" id="regionPill">First Island</div>
+      <div class="weatherPill"><span id="weatherIcon">🌙</span><span id="weatherName">Clear Night</span></div>
+    </div>
+  </div>
+  <div class="icPanel">
+    <div class="icName" id="icNameLbl">INNER CHILD</div>
+    <div class="icAvatar"><canvas id="icCanvas" width="120" height="120"></canvas></div>
+    <div class="icBar"><div class="icFill" id="icFill" style="width:5%"></div></div>
+    <div class="icLbl" id="icLbl">Pixel Seed</div>
+  </div>
+  <div class="hudBottom">
+    <div class="hintBar" id="hintBar">
+      <span class="hint"><span class="k">WASD</span>Move</span>
+      <span class="hint"><span class="k">E</span>Write</span>
+      <span class="hint"><span class="k">F</span>Read</span>
+      <span class="hint"><span class="k">M</span>Map</span>
+      <span class="hint"><span class="k">J</span>Journal</span>
+      <span class="hint"><span class="k">R</span>Reflect</span>
+    </div>
+  </div>
+</div>
+
+<!-- SIDE BUTTONS -->
+<div class="sideStack" id="sideStack" style="display:none">
+  <button class="sideBtn" id="btnWrite" title="Write Memory">✦</button>
+  <button class="sideBtn sm" id="btnMap" title="World Map">⌁</button>
+  <button class="sideBtn sm" id="btnJournal" title="Journal">📓</button>
+  <button class="sideBtn sm" id="btnReflect" title="Reflect">🌙</button>
+</div>
+
+<!-- MOBILE CONTROLS -->
+<div id="joystickZone" aria-label="Joystick"><div id="joyBase"><div id="joyThumb"></div></div></div>
+<div id="mobileActions" aria-label="Mobile Actions">
+  <button class="mobBtn" id="actWrite">✦</button>
+  <button class="mobBtn" id="actRead">📖</button>
+</div>
+
+<!-- MEMORY MODAL -->
+<div class="modal" id="memoryModal" aria-label="Write Memory">
+  <div class="card">
+    <h3>WRITE A MEMORY</h3>
+    <div class="cardSub">Plant a fragment of your inner world</div>
+    <div class="field"><label>Title</label><input id="memTitle" type="text" placeholder="Name this memory…"/></div>
+    <div class="field">
+      <label>Story Type</label>
+      <div class="stypeRow">
+        <div class="stypeBtn active" data-t="memory"><span class="sico">💭</span>Memory</div>
+        <div class="stypeBtn" data-t="dream"><span class="sico">🌊</span>Dream</div>
+        <div class="stypeBtn" data-t="thought"><span class="sico">✨</span>Thought</div>
+        <div class="stypeBtn" data-t="fear"><span class="sico">🌑</span>Fear</div>
+        <div class="stypeBtn" data-t="joy"><span class="sico">☀️</span>Joy</div>
+      </div>
+    </div>
+    <div class="field"><label>Memory</label><textarea id="memText" placeholder="Write what you remember, feel, or imagine…"></textarea></div>
+    <div class="field">
+      <label>Emotion</label>
+      <div class="emGrid" id="emGrid">
+        <button class="emBtn" data-e="joy" type="button"><span class="ico">☀️</span>Joy</button>
+        <button class="emBtn" data-e="sadness" type="button"><span class="ico">🌊</span>Sadness</button>
+        <button class="emBtn" data-e="fear" type="button"><span class="ico">🌑</span>Fear</button>
+        <button class="emBtn active" data-e="hope" type="button"><span class="ico">🌱</span>Hope</button>
+        <button class="emBtn" data-e="curiosity" type="button"><span class="ico">✨</span>Curiosity</button>
+        <button class="emBtn" data-e="love" type="button"><span class="ico">💗</span>Love</button>
+        <button class="emBtn" data-e="anger" type="button"><span class="ico">🔥</span>Anger</button>
+        <button class="emBtn" data-e="wonder" type="button"><span class="ico">🌠</span>Wonder</button>
+      </div>
+    </div>
+    <div class="metaRow">
+      <div class="chip"><b>Unlock</b><span id="unlockHint">?</span></div>
+      <div class="chip"><b>Evolution</b><span id="evoHint">steady</span></div>
+    </div>
+    <button class="actionBtn" id="memSubmit">✦ Plant This Memory ✦</button>
+    <button class="cancelBtn" id="memCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- READ MODAL -->
+<div class="modal" id="readModal" aria-label="Read Memory">
+  <div class="readSheet">
+    <div class="emBar" id="readBar"></div>
+    <div class="readH" id="readH">Title</div>
+    <div class="readMeta"><span class="tag" id="readTag">emotion</span><span class="readType" id="readType"></span></div>
+    <div class="readText" id="readText"></div>
+    <button class="readClose" id="readClose">Close ✦</button>
+  </div>
+</div>
+
+<!-- WORLD MAP MODAL -->
+<div class="modal" id="mapModal" aria-label="World Map">
+  <div class="mapWrap">
+    <div class="panelHeader"><h3>WORLD MAP</h3><button class="closeBtn" id="mapClose">✕</button></div>
+    <div class="mapLegend">
+      <span><span class="legendDot" style="background:#ffd060"></span>Unlocked</span>
+      <span><span class="legendDot" style="background:rgba(160,200,255,.22)"></span>Sealed</span>
+      <span><span class="legendDot" style="background:#40e0d0"></span>Easter hint</span>
+    </div>
+    <div class="mapCanvas" id="mapCanvas" aria-label="Map Canvas"></div>
+    <div class="miniNote">Tip: deeper stories unlock fog regions. Some nodes only appear after certain emotions repeat.</div>
+  </div>
+</div>
+
+<!-- JOURNAL MODAL -->
+<div class="modal" id="archiveModal" aria-label="Journal">
+  <div class="archiveWrap">
+    <div class="panelHeader"><h3>JOURNAL</h3><button class="closeBtn" id="archClose">✕</button></div>
+    <div class="miniNote">Your memories are safe on this device. Tap any entry to re-read it.</div>
+    <div class="archiveList" id="archiveList"></div>
+  </div>
+</div>
+
+<!-- DAILY REFLECTION -->
+<div class="modal" id="dailyPrompt" aria-label="Daily Reflection">
+  <div class="dpPanel">
+    <div class="dpIcon">🌙</div>
+    <div class="dpTitle">DAILY REFLECTION</div>
+    <div class="dpQ" id="dpQ">What feeling have you been carrying that you haven't yet put into words?</div>
+    <button class="dpDismiss" id="dpDismiss">Carry it with me ✦</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="modal" id="settingsModal" aria-label="Settings">
+  <div class="panel">
+    <div class="panelHeader"><h3>SETTINGS</h3><button class="closeBtn" id="settingsClose">✕</button></div>
+    <div class="row"><label>Ambient Sound</label><div class="switch" id="swSound"><div class="knob"></div></div></div>
+    <div class="row"><label>Reduce Motion</label><div class="switch" id="swMotion"><div class="knob"></div></div></div>
+    <div class="row"><label>Whispers</label><div class="switch on" id="swWhisper"><div class="knob"></div></div></div>
+    <div class="miniNote">Ambient uses a light synth tone. "Whispers" are tiny lore messages that appear during play.</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="modal" id="aboutModal" aria-label="About">
+  <div class="panel">
+    <div class="panelHeader"><h3>ABOUT INNERWORLD</h3><button class="closeBtn" id="aboutClose">✕</button></div>
+    <div class="miniNote" style="font-size:13.5px;line-height:1.7">
+      InnerWorld is a narrative sandbox. You build floating worlds from memories — and your inner child evolves as you speak.<br><br>
+      "Not everything needs an audience. Some stories only need a place."
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" aria-live="polite" aria-atomic="true"><div id="toastInner"></div></div>
+
+</div><!-- #app -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ════════════════════════════════════════════════════
+// CORE UTILS
+// ════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const isMobile = () => window.innerWidth < 768 || 'ontouchstart' in window;
+let _toastTimer;
+function showToast(msg, dur=2600){
+  clearTimeout(_toastTimer);
+  $('toastInner').textContent = msg;
+  $('toast').classList.add('show');
+  _toastTimer = setTimeout(()=>$('toast').classList.remove('show'), dur);
+}
+function closeAllModals(){
+  ['memoryModal','readModal','mapModal','archiveModal','dailyPrompt','settingsModal','aboutModal']
+    .forEach(id=>$(id)&&$(id).classList.remove('active'));
+}
+function openModal(id){
+  closeAllModals();
+  $(id).classList.add('active');
+  // randomize reflection each time it opens
+  if(id==='dailyPrompt') $('dpQ').textContent=REFLECTIONS[Math.floor(Math.random()*REFLECTIONS.length)];
+}
+
+// ════════════════════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════════════════════
+const SETTINGS = {
+  sound:false,
+  reduceMotion: !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches),
+  whispers:true,
+  load(){
+    try{
+      const d=JSON.parse(localStorage.getItem('iw_settings')||'null');
+      if(!d)return;
+      this.sound=!!d.sound;
+      this.reduceMotion=d.reduceMotion!==undefined ? !!d.reduceMotion : this.reduceMotion;
+      this.whispers=d.whispers!==false;
+    }catch(e){}
+  },
+  save(){ localStorage.setItem('iw_settings',JSON.stringify({sound:this.sound,reduceMotion:this.reduceMotion,whispers:this.whispers})); }
+};
+function syncSettingsUI(){
+  $('swSound').classList.toggle('on',SETTINGS.sound);
+  $('swMotion').classList.toggle('on',SETTINGS.reduceMotion);
+  $('swWhisper').classList.toggle('on',SETTINGS.whispers);
+}
+
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
+const STATE = {
+  screen:'teaser', memories:[], stage:1,
+  playerPos:{x:0,y:.78,z:0},
+  childName:'', childGender:'boy',
+  totalEmotions:{}, selEmotion:'hope', selType:'memory',
+  load(){
+    try{
+      const d=JSON.parse(localStorage.getItem('iw_save_v2')||'null');
+      if(!d)return false;
+      this.memories=d.memories||[]; this.stage=d.stage||1;
+      this.playerPos=d.playerPos||{x:0,y:.78,z:0};
+      this.childName=d.childName||''; this.childGender=d.childGender||'boy';
+      this.totalEmotions=d.totalEmotions||{};
+      return true;
+    }catch(e){return false;}
+  },
+  save(){
+    localStorage.setItem('iw_save_v2',JSON.stringify({
+      memories:this.memories, stage:this.stage, playerPos:this.playerPos,
+      childName:this.childName, childGender:this.childGender, totalEmotions:this.totalEmotions
+    }));
+  }
+};
+
+// ════════════════════════════════════════════════════
+// EMOTION + STORY CONFIG
+// ════════════════════════════════════════════════════
+const EM = {
+  joy:      {label:'Joy',      grad:'linear-gradient(90deg,#ffc830,#ff9900)', color:0xffc830, emissive:0xff9900, light:0xffd060},
+  sadness:  {label:'Sadness',  grad:'linear-gradient(90deg,#4080e0,#204090)', color:0x4080e0, emissive:0x204090, light:0x4080e0},
+  fear:     {label:'Fear',     grad:'linear-gradient(90deg,#8050c0,#400080)', color:0x8050c0, emissive:0x400080, light:0x8060c0},
+  hope:     {label:'Hope',     grad:'linear-gradient(90deg,#40c880,#208040)', color:0x40c880, emissive:0x208040, light:0x40c880},
+  curiosity:{label:'Curiosity',grad:'linear-gradient(90deg,#ff8030,#c04010)', color:0xff8030, emissive:0xc04010, light:0xff8030},
+  love:     {label:'Love',     grad:'linear-gradient(90deg,#ff6090,#c03060)', color:0xff6090, emissive:0xc03060, light:0xff6090},
+  anger:    {label:'Anger',    grad:'linear-gradient(90deg,#ff4020,#c02000)', color:0xff4020, emissive:0xc02000, light:0xff4020},
+  wonder:   {label:'Wonder',   grad:'linear-gradient(90deg,#80c0ff,#3070c0)', color:0x80c0ff, emissive:0x3070c0, light:0x80c0ff},
+};
+const STYPES = {memory:{label:'Memory',icon:'💭'},dream:{label:'Dream',icon:'🌊'},thought:{label:'Thought',icon:'✨'},fear:{label:'Fear',icon:'🌑'},joy:{label:'Joy',icon:'☀️'}};
+
+// ════════════════════════════════════════════════════
+// AMBIENT AUDIO
+// ════════════════════════════════════════════════════
+let audioCtx=null, audioGain=null;
+function startAmbient(){
+  if(audioCtx)return;
+  try{
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator();
+    audioGain=audioCtx.createGain();
+    const lfo=audioCtx.createOscillator(), lfoG=audioCtx.createGain();
+    osc.type='sine'; osc.frequency.value=110;
+    audioGain.gain.value=0.0001;
+    lfo.type='sine'; lfo.frequency.value=0.08; lfoG.gain.value=22;
+    lfo.connect(lfoG); lfoG.connect(osc.frequency);
+    osc.connect(audioGain); audioGain.connect(audioCtx.destination);
+    osc.start(); lfo.start();
+    audioGain.gain.setTargetAtTime(0.022, audioCtx.currentTime, 0.6);
+  }catch(e){audioCtx=null;}
+}
+function stopAmbient(){
+  if(!audioCtx)return;
+  try{ audioGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.3); setTimeout(()=>{audioCtx.close();audioCtx=null;audioGain=null;},450); }catch(e){audioCtx=null;}
+}
+
+// ════════════════════════════════════════════════════
+// WHISPERS
+// ════════════════════════════════════════════════════
+const WHISPERS=[
+  '"A sealed door is not a no. It\'s a not-yet."',
+  '"Patterns create portals."',
+  '"Repeat a feeling… and the fog learns your name."',
+  '"Some islands refuse to appear in daylight."',
+  '"You can leave a memory unfinished. The world still keeps it."',
+  '"A hidden node wakes up when you stop forcing it."',
+  '"Your inner child watches every story you plant."',
+  '"The weather inside you shapes the weather around you."',
+  '"Some doors need a certain emotion… repeated."',
+  '"Growth is not loud. It is consistent."',
+  '"The only map that matters is the one you make."',
+  '"Every true word plants something."',
+];
+let whisperTimer=null;
+function startWhispers(){
+  stopWhispers();
+  if(!SETTINGS.whispers)return;
+  whisperTimer=setInterval(()=>{
+    if(STATE.screen!=='gameScreen')return;
+    showToast(WHISPERS[Math.floor(Math.random()*WHISPERS.length)],2400);
+  },18000);
+}
+function stopWhispers(){ if(whisperTimer){clearInterval(whisperTimer);whisperTimer=null;} }
+
+// ════════════════════════════════════════════════════
+// STAR / DUST SEEDING
+// ════════════════════════════════════════════════════
+function seedStars(){
+  const st=$('stars'), du=$('dust');
+  for(let i=0;i<150;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.setProperty('--s',(Math.random()*2+.5)+'px');
+    s.style.setProperty('--o',(Math.random()*.6+.08).toFixed(2));
+    s.style.setProperty('--d',(2+Math.random()*4)+'s');
+    s.style.setProperty('--dl',(Math.random()*4)+'s');
+    s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+    st.appendChild(s);
+  }
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='dustDot';
+    p.style.left=(20+Math.random()*60)+'%'; p.style.bottom=(10+Math.random()*50)+'%';
+    p.style.setProperty('--fd',(6+Math.random()*8)+'s');
+    p.style.setProperty('--dl',(Math.random()*5)+'s');
+    p.style.setProperty('--dx',(Math.random()*70-35)+'px');
+    du.appendChild(p);
+  }
+  // inner portal stars
+  const nest=$('innerStarNest');
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.setProperty('--s',(Math.random()*1.6+.4)+'px');
+    s.style.setProperty('--o',(Math.random()*.7+.1).toFixed(2));
+    s.style.setProperty('--d',(2+Math.random()*3)+'s');
+    s.style.setProperty('--dl',(Math.random()*4)+'s');
+    s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+    nest.appendChild(s);
+  }
+  // teaser dust particles
+  const td=$('teaserDust');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='tDust';
+    p.style.left=(15+Math.random()*70)+'%'; p.style.bottom=Math.random()*55+'%';
+    p.style.setProperty('--fd',(5+Math.random()*8)+'s');
+    p.style.setProperty('--dl',(Math.random()*6)+'s');
+    p.style.setProperty('--dx',(Math.random()*60-30)+'px');
+    td.appendChild(p);
+  }
+  // entrance sparkles
+  const es=$('entSparkles');
+  for(let i=0;i<22;i++){
+    const sp=document.createElement('div');
+    sp.className='eSpark';
+    const sz=2+Math.random()*4;
+    sp.style.cssText=`width:${sz}px;height:${sz}px;background:radial-gradient(circle,rgba(255,200,80,.9),transparent);left:${Math.random()*100}%;bottom:${20+Math.random()*60}%;`;
+    sp.style.setProperty('--sd',(1.5+Math.random()*4)+'s');
+    sp.style.setProperty('--sdl',(Math.random()*5)+'s');
+    es.appendChild(sp);
+  }
+}
+
+// ════════════════════════════════════════════════════
+// TEASER
+// ════════════════════════════════════════════════════
+const TEASER_LORES=[
+  '"Some doors only appear after you speak."',
+  '"Every mind contains a world it has not yet named."',
+  '"The fog clears for those who walk through it."',
+  '"Your memories are not the past — they are a place."',
+];
+function initTeaser(){
+  $('teaserLore').textContent=TEASER_LORES[Math.floor(Math.random()*TEASER_LORES.length)];
+  let done=false;
+  const proceed=()=>{ if(done)return; done=true; $('teaser').style.transition='opacity .8s'; $('teaser').style.opacity='0'; setTimeout(showEntrance,800); };
+  $('teaser').addEventListener('click',proceed);
+  $('teaser').addEventListener('touchend',e=>{e.preventDefault();proceed();},{passive:false});
+  setTimeout(proceed,5200);
+}
+
+// ════════════════════════════════════════════════════
+// ENTRANCE
+// ════════════════════════════════════════════════════
+function showEntrance(){
+  $('teaser').style.display='none';
+  const hasSave=STATE.load();
+  $('btnContinue').style.display=hasSave&&STATE.memories.length>0?'block':'none';
+  showScreen('entrance');
+}
+
+// ════════════════════════════════════════════════════
+// CHARACTER CREATION
+// ════════════════════════════════════════════════════
+let selectedGender='boy';
+function selectGender(g){
+  selectedGender=g;
+  ['boy','girl','spirit'].forEach(x=>$('gender'+x.charAt(0).toUpperCase()+x.slice(1)).classList.remove('active'));
+  $('gender'+g.charAt(0).toUpperCase()+g.slice(1)).classList.add('active');
+}
+function showCharCreate(){
+  $('charCreate').classList.add('active');
+  $('charCreate').style.display='flex';
+  // fade in
+  $('charCreate').style.opacity='0';
+  requestAnimationFrame(()=>{$('charCreate').style.transition='opacity .5s';$('charCreate').style.opacity='1';});
+}
+function hideCharCreate(cb){
+  $('charCreate').style.transition='opacity .6s';
+  $('charCreate').style.opacity='0';
+  setTimeout(()=>{ $('charCreate').style.display='none'; $('charCreate').classList.remove('active'); if(cb)cb(); },600);
+}
+
+// ════════════════════════════════════════════════════
+// ONBOARDING SLIDES
+// ════════════════════════════════════════════════════
+const SLIDES=[
+  {chapter:'CHAPTER I',icon:'🗝',h:'You are entering a mind.',p:'This world reacts to what you share. No one is judging. Only you — and the doors you choose to open.',w:'"Say one true thing… and watch the sky change."',extra:null},
+  {chapter:'CHAPTER II',icon:'🧒',h:'Meet your inner child.',p:'They start small — pixel-like. The more you write, the more they become <em>real</em>. Their form, glow, and life all grow with you.',w:'"Growth is not loud. It is consistent."',extra:null},
+  {chapter:'CHAPTER III',icon:'✦',h:'Write to expand the world.',p:'Each memory becomes a floating island. The <em>emotion</em> you choose changes its colour, features, and the weather around your world.',w:'"Some doors need a certain feeling… repeated."',extra:null},
+  {chapter:'CHAPTER IV',icon:'⌁',h:'Navigate &amp; discover.',p:'Use <em>WASD</em> or the joystick to move. Glowing beacons mark regions waiting to unlock. Walk far enough — something always appears.',w:'"You will feel it when a hidden node wakes up."',
+    extra:`<div class="ctrlPreview"><div class="ctrlTag"><span class="ctrlK">W A S D</span>Move</div><div class="ctrlTag"><span class="ctrlK">E</span>Write</div><div class="ctrlTag"><span class="ctrlK">F</span>Read</div><div class="ctrlTag"><span class="ctrlK">M</span>Map</div><div class="ctrlTag"><span class="ctrlK">R</span>Reflect</div></div>`
+  },
+  {chapter:'CHAPTER V',icon:'🌈',h:'Your journey has no wrong path.',p:'There are no rules here. Write a dream. Plant a fear. Let your world grow. Your inner child is waiting.',w:'"The only map that matters is the one you make."',extra:null},
+];
+let slideIdx=0;
+function renderOnboarding(){
+  const s=SLIDES[slideIdx];
+  $('onbChapter').textContent=s.chapter;
+  $('slideIcon').textContent=s.icon;
+  $('slideH').innerHTML=s.h;
+  $('slideP').innerHTML=s.p;
+  $('slideWhisper').textContent=s.w;
+  $('slideExtra').innerHTML=s.extra||'';
+  const dots=$('onbDots'); dots.innerHTML='';
+  SLIDES.forEach((_,i)=>{ const d=document.createElement('div'); d.className='dot'+(i===slideIdx?' active':''); dots.appendChild(d); });
+  $('onbPrev').disabled=slideIdx===0; $('onbPrev').style.opacity=slideIdx===0?.5:1;
+  const last=slideIdx===SLIDES.length-1;
+  $('onbNext').textContent=last?'✦ Begin':'Next';
+  $('onbNext').style.background=last?'linear-gradient(135deg,rgba(255,200,80,.3),rgba(200,130,20,.2))':'linear-gradient(135deg,rgba(255,180,50,.12),rgba(180,100,20,.10))';
+}
+
+// ════════════════════════════════════════════════════
+// SCREEN MANAGER
+// ════════════════════════════════════════════════════
+function showScreen(id){
+  ['teaser','entrance','onboarding','gameScreen'].forEach(s=>{ const el=$(s); if(el){el.classList.remove('active');} });
+  $(id).classList.add('active');
+  STATE.screen=id;
+}
+
+// ════════════════════════════════════════════════════
+// GAME START
+// ════════════════════════════════════════════════════
+let scene,camera,renderer,clock;
+let playerGroup,playerGlowParticles=[];
+let islands=[],bridges=[];
+let particleSystem;
+let keys={},moveDir={x:0,z:0};
+let nearbyIsland=null;
+let cameraBaseY=12,cameraBaseZ=14;
+let ambientLight,moonLight;
+let weatherMode='clear',weatherTimer=0;
+let icCanvas,icCtx;
+let lastRegion='',regionFlashTimer=0;
+
+const WEATHER_MODES=['clear','clear','clear','fog','rain'];
+const WEATHER_DEFS={
+  clear:{fogColor:0x06101e,fogDensity:.017,ambInt:.75,icon:'🌙',name:'Clear Night'},
+  fog:  {fogColor:0x0d1525,fogDensity:.042,ambInt:.50,icon:'🌫',name:'Mystic Fog'},
+  rain: {fogColor:0x080e1a,fogDensity:.026,ambInt:.60,icon:'🌧',name:'Memory Rain'},
+};
+
+function startGame(fromSave=false){
+  showScreen('gameScreen');
+  $('hud').classList.add('active');
+  $('sideStack').style.display='flex';
+  const mobile=isMobile();
+  $('joystickZone').style.display=mobile?'block':'none';
+  $('mobileActions').style.display=mobile?'flex':'none';
+  $('hintBar').style.display=mobile?'none':'flex';
+  if(!fromSave){ STATE.memories=[]; STATE.stage=1; STATE.playerPos={x:0,y:.78,z:0}; STATE.totalEmotions={}; }
+  $('icNameLbl').textContent=STATE.childName||'INNER CHILD';
+  icCanvas=$('icCanvas'); icCtx=icCanvas.getContext('2d');
+  initThreeJS(fromSave);
+  setupMemoryModal();
+  startWhispers();
+  if(SETTINGS.sound) startAmbient();
+  if(fromSave) setTimeout(()=>openModal('dailyPrompt'),3000);
+  else setTimeout(()=>showToast('✦ Press E to write your first memory…'),1800);
+}
+
+// ════════════════════════════════════════════════════
+// THREE.JS ENGINE
+// ════════════════════════════════════════════════════
+function initThreeJS(fromSave){
+  const canvas=$('gameCanvas');
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=.88;
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x04091a);
+  scene.fog=new THREE.FogExp2(0x06101e,.017);
+  camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,500);
+  camera.position.set(0,cameraBaseY,cameraBaseZ);
+  camera.lookAt(0,0,0);
+  clock=new THREE.Clock();
+  buildScene(); buildPlayer(); buildParticleSystem(); buildStarfield(); buildWorldRegions();
+  if(fromSave&&STATE.memories.length>0){ STATE.memories.forEach(m=>spawnIsland(m,false)); updateBridges(); }
+  setupControls(); setupMobileJoystick(); setupResize();
+  updateHUD(); updatePlayerStage();
+  animate();
+  showToast(fromSave?'✦ Welcome back, '+STATE.childName+'…':'✦ Your world begins to breathe…');
+}
+
+function buildScene(){
+  ambientLight=new THREE.AmbientLight(0x102040,.75); scene.add(ambientLight);
+  moonLight=new THREE.DirectionalLight(0x8090c0,.55); moonLight.position.set(-22,32,-22); moonLight.castShadow=true; scene.add(moonLight);
+  scene.add(new THREE.PointLight(0x604020,1.5,55)).position.set(0,9,0);
+  buildMainIsland(); buildPortalRing();
+}
+function buildMainIsland(){
+  const g=new THREE.Group();
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(4.5,3.5,1.3,14),new THREE.MeshStandardMaterial({color:0x1a2f4a,roughness:.85,metalness:.1,emissive:0x051020,emissiveIntensity:.3})),{receiveShadow:true}));
+  const gr=new THREE.Mesh(new THREE.CylinderGeometry(4.4,4.3,.28,14),new THREE.MeshStandardMaterial({color:0x1a3820,roughness:.9,emissive:0x0a2010,emissiveIntensity:.4})); gr.position.y=.65; g.add(gr);
+  for(let i=0;i<10;i++){
+    const r=new THREE.Mesh(new THREE.DodecahedronGeometry(.14+Math.random()*.22,0),new THREE.MeshStandardMaterial({color:0x2a3a50,roughness:.9}));
+    const a=Math.random()*Math.PI*2,d=.8+Math.random()*3.2;
+    r.position.set(Math.cos(a)*d,.72+Math.random()*.1,Math.sin(a)*d);
+    r.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);
+    r.scale.setScalar(.6+Math.random()*.7); g.add(r);
+  }
+  const cols=[0xffc830,0x40c8ff,0xff80a0,0x80ff80,0xc080ff];
+  for(let i=0;i<16;i++){
+    const c=cols[Math.floor(Math.random()*cols.length)];
+    const gem=new THREE.Mesh(new THREE.OctahedronGeometry(.07,0),new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.8,roughness:0,metalness:.5}));
+    const a=Math.random()*Math.PI*2,d=.5+Math.random()*3.5; gem.position.set(Math.cos(a)*d,.82,Math.sin(a)*d); g.add(gem);
+  }
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.26,1.6,8),new THREE.MeshStandardMaterial({color:0x3d2a18,roughness:.95})); trunk.position.set(0,1.4,0); trunk.castShadow=true; g.add(trunk);
+  const bMesh=new THREE.Mesh(new THREE.DodecahedronGeometry(.55,1),new THREE.MeshStandardMaterial({color:0x1e3a18,emissive:0x0a2010,emissiveIntensity:.5,roughness:.8})); bMesh.position.set(0,2.7,0); bMesh.castShadow=true; g.add(bMesh);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(3.8,.04,8,40),new THREE.MeshStandardMaterial({color:0xffd060,emissive:0xffa020,emissiveIntensity:.8})); ring.rotation.x=Math.PI/2; ring.position.y=.75; g.add(ring);
+  g.position.y=-.6; scene.add(g);
+  scene.userData.mainTree=bMesh;
+}
+function buildPortalRing(){
+  const rg=new THREE.Group();
+  rg.add(new THREE.Mesh(new THREE.TorusGeometry(3.5,.065,16,80),new THREE.MeshStandardMaterial({color:0xffd060,emissive:0xffa020,emissiveIntensity:2.5,roughness:0,metalness:.8})));
+  rg.add(Object.assign(new THREE.Mesh(new THREE.CircleGeometry(3.4,64),new THREE.MeshBasicMaterial({color:0x204080,transparent:true,opacity:.1,side:THREE.DoubleSide}))));
+  const spMat=new THREE.MeshBasicMaterial({color:0xffffaa});
+  for(let i=0;i<24;i++){ const a=(i/24)*Math.PI*2; const s=new THREE.Mesh(new THREE.SphereGeometry(.05,4,4),spMat); s.position.set(Math.cos(a)*3.5,Math.sin(a)*3.5,0); rg.add(s); }
+  rg.position.set(0,9,0); scene.add(rg); scene.userData.portalRing=rg;
+  const rl=new THREE.PointLight(0xffd060,3,12); rl.position.set(0,9,0); scene.add(rl); scene.userData.rimLight=rl;
+}
+function buildWorldRegions(){
+  const defs=[
+    {x:-40,z:-60,c:0x1a4020,gl:0x40c880,n:'Memory Forest',sz:8},
+    {x:55,z:-30,c:0x102040,gl:0x4080e0,n:'Dream Lake',sz:6},
+    {x:-55,z:-20,c:0x200030,gl:0x8050c0,n:'Shadow Valley',sz:7},
+    {x:0,z:-90,c:0x204060,gl:0x80c0ff,n:'Future Mountain',sz:12},
+  ];
+  defs.forEach(d=>{
+    const g=new THREE.Group();
+    g.add(new THREE.Mesh(new THREE.CylinderGeometry(d.sz*.9,d.sz*1.2,d.sz*.5,10),new THREE.MeshStandardMaterial({color:d.c,emissive:d.gl,emissiveIntensity:.2,roughness:.9})));
+    const b=new THREE.Mesh(new THREE.SphereGeometry(.4,8,8),new THREE.MeshStandardMaterial({color:d.gl,emissive:d.gl,emissiveIntensity:3,roughness:0})); b.position.y=d.sz*.35+.8; g.add(b);
+    const l=new THREE.PointLight(d.gl,.8,15); l.position.set(0,d.sz*.35+.8,0); g.add(l);
+    g.position.set(d.x,-.5,d.z); scene.add(g);
+  });
+}
+function buildPlayer(){
+  playerGroup=new THREE.Group();
+  const g=STATE.childGender||'boy';
+  const skinC=g==='spirit'?0xd0c0ff:0xf4c090, hairC=g==='girl'?0xa05030:g==='spirit'?0xc0a0ff:0xd4a860, bodyC=g==='spirit'?0x8060c0:g==='girl'?0xd06080:0xe8e0d0;
+  const sM=new THREE.MeshStandardMaterial({color:skinC,roughness:.9}), hM=new THREE.MeshStandardMaterial({color:hairC,roughness:1}), bM=new THREE.MeshStandardMaterial({color:bodyC,roughness:.8,emissive:0x201808,emissiveIntensity:.18}), dM=new THREE.MeshStandardMaterial({color:0x1a2535,roughness:.9});
+  const head=new THREE.Mesh(new THREE.BoxGeometry(.38,.36,.36),sM); head.position.set(0,1.28,0); head.castShadow=true; playerGroup.add(head);
+  const hair=new THREE.Mesh(new THREE.BoxGeometry(.40,.13,.38),hM); hair.position.set(0,1.5,0); playerGroup.add(hair);
+  if(g==='spirit'){ const halo=new THREE.Mesh(new THREE.TorusGeometry(.2,.02,8,20),new THREE.MeshStandardMaterial({color:0xffd060,emissive:0xffd060,emissiveIntensity:2})); halo.position.set(0,1.66,0); playerGroup.add(halo); }
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.36,.44,.22),bM); body.position.set(0,.9,0); body.castShadow=true; playerGroup.add(body);
+  [[.26],[-.26]].forEach(([x])=>{ const a=new THREE.Mesh(new THREE.BoxGeometry(.12,.35,.12),bM); a.position.set(x,.9,0); playerGroup.add(a); });
+  [[.1],[-.1]].forEach(([x])=>{ const l=new THREE.Mesh(new THREE.BoxGeometry(.14,.3,.14),dM); l.position.set(x,.52,0); playerGroup.add(l); const s=new THREE.Mesh(new THREE.BoxGeometry(.16,.1,.2),dM); s.position.set(x,.37,.04); playerGroup.add(s); });
+  const bag=new THREE.Mesh(new THREE.BoxGeometry(.18,.25,.12),new THREE.MeshStandardMaterial({color:0x6b3820,roughness:.9})); bag.position.set(0,.95,-.17); playerGroup.add(bag);
+  playerGroup.position.set(STATE.playerPos.x,STATE.playerPos.y,STATE.playerPos.z); scene.add(playerGroup);
+  playerGlowParticles=[];
+  [0xffd060,0x80ffff,0xff80c0,0xa0ff80,0xffd060,0x80ffff,0xff80c0,0xa0ff80].forEach((c,i)=>{
+    const p=new THREE.Mesh(new THREE.SphereGeometry(.04+Math.random()*.03,4,4),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.7}));
+    p.userData={angle:(i/8)*Math.PI*2,radius:.6+Math.random()*.4,speed:.5+Math.random()*.5,height:.8+Math.random()*.6,phase:Math.random()*Math.PI*2};
+    playerGroup.add(p); playerGlowParticles.push(p);
+  });
+  const pl=new THREE.PointLight(0xffd080,.8,5); pl.position.set(0,1.5,0); playerGroup.add(pl);
+}
+function buildParticleSystem(){
+  const geo=new THREE.BufferGeometry(), pos=new Float32Array(1200*3);
+  for(let i=0;i<1200*3;i+=3){ pos[i]=(Math.random()-.5)*200; pos[i+1]=Math.random()*35; pos[i+2]=(Math.random()-.5)*200; }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  particleSystem=new THREE.Points(geo,new THREE.PointsMaterial({color:0x80c0ff,size:.08,transparent:true,opacity:.6}));
+  scene.add(particleSystem);
+}
+function buildStarfield(){
+  const geo=new THREE.BufferGeometry(), pos=new Float32Array(3000*3);
+  for(let i=0;i<3000*3;i+=3){ const r=180+Math.random()*80,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1); pos[i]=r*Math.sin(p)*Math.cos(t); pos[i+1]=r*Math.abs(Math.cos(p)); pos[i+2]=r*Math.sin(p)*Math.sin(t); }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xd0e8ff,size:.18,transparent:true,opacity:.8})));
+}
+
+// ════════════════════════════════════════════════════
+// ISLAND SYSTEM
+// ════════════════════════════════════════════════════
+const IPOS=[{x:8,z:-8},{x:-8,z:-9},{x:12,z:4},{x:-11,z:3},{x:0,z:-13},{x:16,z:-5},{x:-14,z:-8},{x:6,z:12},{x:-6,z:11},{x:18,z:8},{x:-16,z:6},{x:10,z:-15},{x:-10,z:-14}];
+function spawnIsland(mem,anim=true){
+  const em=EM[mem.emotion]||EM.hope;
+  const idx=islands.length, pos=IPOS[idx%IPOS.length];
+  const spread=Math.floor(idx/IPOS.length), sz=.8+Math.random()*.5;
+  const ox=spread>0?(Math.random()-.5)*20:0, oz=spread>0?(Math.random()-.5)*20:0;
+  const g=new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(2*sz,1.5*sz,.8,10),new THREE.MeshStandardMaterial({color:0x152030,roughness:.8,emissive:em.emissive,emissiveIntensity:.12})));
+  const top=new THREE.Mesh(new THREE.CylinderGeometry(1.95*sz,1.9*sz,.15,10),new THREE.MeshStandardMaterial({color:em.color,emissive:em.emissive,emissiveIntensity:.5,roughness:.7})); top.position.y=.45; g.add(top);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(1.8*sz,.05,6,30),new THREE.MeshStandardMaterial({color:em.color,emissive:em.emissive,emissiveIntensity:2})); ring.rotation.x=Math.PI/2; ring.position.y=-.3; g.add(ring);
+  buildIslandFeature(g,mem.emotion,sz);
+  const light=new THREE.PointLight(em.light||em.color,1.2,8); light.position.set(0,2,0); g.add(light);
+  g.position.set(pos.x+ox,1.5+Math.random()*2,pos.z+oz);
+  g.userData={memory:mem,em,baseY:g.position.y};
+  scene.add(g); islands.push(g);
+  if(anim){ g.scale.setScalar(0); let s=0; const grow=setInterval(()=>{s=Math.min(s+.06,1);g.scale.setScalar(s);if(s>=1)clearInterval(grow);},16); }
+  updateMemoryTree();
+}
+function buildIslandFeature(g,emotion,sz){
+  const m={
+    joy:()=>{ for(let i=0;i<5;i++){ const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.04,0,.8*sz,5),new THREE.MeshStandardMaterial({color:0xffd060,emissive:0xffd060,emissiveIntensity:1.5,transparent:true,opacity:.85})); const a=Math.random()*Math.PI*2,d=.2+Math.random()*.8; mesh.position.set(Math.cos(a)*d,.5,Math.sin(a)*d); mesh.rotation.set(Math.random()*.3,0,Math.random()*.3); g.add(mesh); }},
+    sadness:()=>{ const m=new THREE.Mesh(new THREE.CylinderGeometry(.08,.15,1.2,8),new THREE.MeshStandardMaterial({color:0x4080e0,emissive:0x4080e0,emissiveIntensity:.8,transparent:true,opacity:.7})); m.position.set(.3,1,.2); g.add(m); },
+    fear:()=>{ const m=new THREE.Mesh(new THREE.ConeGeometry(.2*sz,1.4*sz,6),new THREE.MeshStandardMaterial({color:0x8050c0,emissive:0x8050c0,emissiveIntensity:.6,roughness:.4})); m.position.set(0,.9,0); g.add(m); },
+    hope:()=>{ const stem=new THREE.Mesh(new THREE.CylinderGeometry(.05,.08,.5,5),new THREE.MeshStandardMaterial({color:0x3d2a18,roughness:.9})); stem.position.set(0,.6,0); g.add(stem); const leaf=new THREE.Mesh(new THREE.SphereGeometry(.25*sz+.1,6,6),new THREE.MeshStandardMaterial({color:0x40c880,emissive:0x40c880,emissiveIntensity:.6,roughness:.7})); leaf.position.set(0,.95,0); g.add(leaf); },
+    curiosity:()=>{ const ff=new THREE.Mesh(new THREE.SphereGeometry(.09,6,6),new THREE.MeshStandardMaterial({color:0xff8030,emissive:0xff8030,emissiveIntensity:3})); ff.userData.firefly=true; ff.userData.phase=Math.random()*Math.PI*2; g.add(ff); },
+    love:()=>{ [[0,.5,0],[.4,.5,.3],[-.4,.5,.3],[0,.5,.5]].forEach(([x,y,z])=>{ const p=new THREE.Mesh(new THREE.SphereGeometry(.13*sz,5,5),new THREE.MeshStandardMaterial({color:0xff6090,emissive:0xff6090,emissiveIntensity:.8,roughness:.6})); p.position.set(x,y,z); g.add(p); }); },
+    anger:()=>{ const v=new THREE.Mesh(new THREE.ConeGeometry(.35*sz,.8*sz,8),new THREE.MeshStandardMaterial({color:0x300000,emissive:0xff4020,emissiveIntensity:.4,roughness:.8})); v.position.set(0,.8,0); g.add(v); const l=new THREE.Mesh(new THREE.SphereGeometry(.18*sz,6,6),new THREE.MeshStandardMaterial({color:0xff4020,emissive:0xff4020,emissiveIntensity:2})); l.position.set(0,1.2,0); g.add(l); },
+    wonder:()=>{ const a=new THREE.Mesh(new THREE.TorusGeometry(.5*sz,.04,6,16,.9*Math.PI),new THREE.MeshStandardMaterial({color:0x80c0ff,emissive:0x80c0ff,emissiveIntensity:1.5})); a.position.set(0,1,0); a.rotation.y=Math.PI/2; g.add(a); },
+  };
+  (m[emotion]||m.hope)();
+}
+function updateBridges(){
+  bridges.forEach(b=>scene.remove(b)); bridges=[];
+  for(let i=0;i<islands.length-1;i++){
+    const a=islands[i].position, b=islands[i+1].position;
+    const dir=new THREE.Vector3().subVectors(b,a), len=dir.length();
+    const br=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,len,6),new THREE.MeshStandardMaterial({color:0xffd080,emissive:0xffa020,emissiveIntensity:.4,transparent:true,opacity:.4}));
+    br.position.copy(a).add(b).multiplyScalar(.5);
+    br.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+    scene.add(br); bridges.push(br);
+  }
+}
+function updateMemoryTree(){
+  const t=scene.userData.mainTree; if(!t)return;
+  t.scale.setScalar(Math.min(1+STATE.memories.length*.12,3));
+  const counts={}; STATE.memories.forEach(m=>{counts[m.emotion]=(counts[m.emotion]||0)+1;});
+  const dom=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(dom){ const e=EM[dom[0]]; if(e) t.material.emissive.setHex(e.emissive); }
+}
+
+// ════════════════════════════════════════════════════
+// PLAYER STAGE + INNER CHILD CANVAS
+// ════════════════════════════════════════════════════
+const STAGES=[
+  {name:'Pixel Seed',  lbl:'Stage I · Seed',   min:0,  fill:5},
+  {name:'Pixel Glow',  lbl:'Stage II · Glow',  min:3,  fill:30},
+  {name:'Semi Form',   lbl:'Stage III · Form', min:7,  fill:65},
+  {name:'Fully Alive', lbl:'Stage IV · Alive', min:13, fill:100},
+];
+function updatePlayerStage(){
+  const n=STATE.memories.length;
+  let stage=STAGES[0]; for(const s of STAGES){if(n>=s.min)stage=s;}
+  $('stageBadge').textContent=stage.lbl;
+  $('icLbl').textContent=stage.name;
+  $('icFill').style.width=stage.fill+'%';
+  drawInnerChild(STAGES.indexOf(stage));
+  playerGlowParticles.forEach((p,i)=>{p.visible=i<(STAGES.indexOf(stage)+1)*2;});
+}
+function drawInnerChild(si){
+  if(!icCtx)return;
+  const c=icCtx, w=icCanvas.width, h=icCanvas.height, cx=w/2, cy=h/2;
+  c.clearRect(0,0,w,h);
+  const bg=c.createRadialGradient(cx,cy,0,cx,cy,cx);
+  bg.addColorStop(0,'rgba(15,35,80,.95)'); bg.addColorStop(1,'rgba(5,12,35,.98)');
+  c.fillStyle=bg; c.fillRect(0,0,w,h);
+  if(si>=1){ const aura=c.createRadialGradient(cx,cy*.8,0,cx,cy*.8,cx*.7); aura.addColorStop(0,['rgba(255,200,80,.12)','rgba(64,200,128,.16)','rgba(180,100,255,.22)','rgba(255,160,80,.28)'][si]); aura.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=aura; c.fillRect(0,0,w,h); }
+  const g=STATE.childGender||'boy';
+  const sk=g==='spirit'?'#d0b0ff':'#f4c090', ha=g==='spirit'?'#b090ff':g==='girl'?'#a05030':'#d4a860', bd=g==='spirit'?'#8060c0':g==='girl'?'#d06080':'#c8b898';
+  if(si===0){
+    // pixel art
+    c.fillStyle=sk;
+    [[44,28],[44,32],[44,36],[44,40],[48,28],[48,40],[52,28],[52,40],[56,28],[56,32],[56,36],[56,40]].forEach(([x,y])=>c.fillRect(x,y,4,4));
+    c.fillStyle=ha; [[44,24],[48,24],[52,24],[56,24]].forEach(([x,y])=>c.fillRect(x,y,4,4));
+    c.fillStyle=bd; [[44,44],[48,44],[52,44],[56,44],[44,48],[48,48],[52,48],[56,48]].forEach(([x,y])=>c.fillRect(x,y,4,4));
+    c.fillStyle='#2040a0'; c.fillRect(47,33,3,3); c.fillRect(54,33,3,3);
+  } else {
+    const sc=.7+si*.15, bx=cx, by=cy+10;
+    c.fillStyle=bd; c.beginPath(); c.roundRect&&c.roundRect(bx-12*sc,by-20*sc,24*sc,28*sc,3*sc)||c.rect(bx-12*sc,by-20*sc,24*sc,28*sc); c.fill();
+    c.fillStyle=sk; c.beginPath(); c.arc(bx,by-28*sc,14*sc,0,Math.PI*2); c.fill();
+    c.fillStyle=ha; c.beginPath(); c.arc(bx,by-33*sc,14*sc,Math.PI,.95*Math.PI,true); c.fill(); c.beginPath(); c.arc(bx,by-28*sc,14*sc,Math.PI,1.9*Math.PI); c.fill();
+    c.fillStyle='#fff'; c.beginPath(); c.arc(bx-5*sc,by-28*sc,3*sc,0,Math.PI*2); c.fill(); c.beginPath(); c.arc(bx+5*sc,by-28*sc,3*sc,0,Math.PI*2); c.fill();
+    c.fillStyle='#2040a0'; c.beginPath(); c.arc(bx-5*sc,by-28*sc,1.5*sc,0,Math.PI*2); c.fill(); c.beginPath(); c.arc(bx+5*sc,by-28*sc,1.5*sc,0,Math.PI*2); c.fill();
+    c.strokeStyle='rgba(80,40,20,.7)'; c.lineWidth=1.5*sc; c.lineCap='round'; c.beginPath(); c.arc(bx,by-26*sc,4*sc,.1*Math.PI,.9*Math.PI); c.stroke();
+    c.fillStyle=bd; c.beginPath(); (c.roundRect&&c.roundRect(bx-20*sc,by-18*sc,8*sc,20*sc,3*sc))||c.rect(bx-20*sc,by-18*sc,8*sc,20*sc); c.fill(); (c.roundRect&&c.roundRect(bx+12*sc,by-18*sc,8*sc,20*sc,3*sc))||c.rect(bx+12*sc,by-18*sc,8*sc,20*sc); c.fill();
+    c.fillStyle='#1a2535'; (c.roundRect&&c.roundRect(bx-10*sc,by+8*sc,9*sc,16*sc,3*sc))||c.rect(bx-10*sc,by+8*sc,9*sc,16*sc); c.fill(); (c.roundRect&&c.roundRect(bx+1*sc,by+8*sc,9*sc,16*sc,3*sc))||c.rect(bx+1*sc,by+8*sc,9*sc,16*sc); c.fill();
+    if(g==='spirit'){ c.strokeStyle='rgba(255,210,80,.8)'; c.lineWidth=2.5; c.beginPath(); c.ellipse(bx,by-44*sc,12*sc,4*sc,0,0,Math.PI*2); c.stroke(); }
+    if(si>=2){ ['#ffd060','#80ffff','#ff80c0','#ffd060','#80ffff','#ff80c0'].forEach((col,i)=>{ const a=(i/6)*Math.PI*2; c.fillStyle=col; c.beginPath(); c.arc(cx+Math.cos(a)*42,cy+Math.sin(a)*42,2,0,Math.PI*2); c.fill(); }); }
+  }
+}
+
+// ════════════════════════════════════════════════════
+// WEATHER
+// ════════════════════════════════════════════════════
+function updateWeather(time){
+  weatherTimer+=.016;
+  if(weatherTimer>35){ weatherTimer=0; const nw=WEATHER_MODES[Math.floor(Math.random()*WEATHER_MODES.length)]; if(nw!==weatherMode){ weatherMode=nw; applyWeather(nw); } }
+}
+function applyWeather(mode){
+  const d=WEATHER_DEFS[mode]||WEATHER_DEFS.clear;
+  scene.fog.color.setHex(d.fogColor); scene.fog.density=d.fogDensity; ambientLight.intensity=d.ambInt;
+  $('weatherIcon').textContent=d.icon; $('weatherName').textContent=d.name;
+  showToast('The air shifts… '+d.name);
+}
+
+// ════════════════════════════════════════════════════
+// REGION DETECTION
+// ════════════════════════════════════════════════════
+function detectRegion(){
+  const px=playerGroup.position.x, pz=playerGroup.position.z;
+  let r='First Island';
+  if(pz<-65)r='Future Mountain';
+  else if(pz<-30&&px>30)r='Dream Lake';
+  else if(pz<-30&&px<-30)r='Shadow Valley';
+  else if(pz<-35)r='Memory Forest';
+  if(r!==lastRegion){
+    lastRegion=r;
+    $('regionPill').textContent=r;
+    const sub=$('hudSub');
+    sub.classList.remove('visible');
+    void sub.offsetWidth;
+    sub.classList.add('visible');
+    showToast('✦ Entering: '+r);
+  }
+}
+
+// ════════════════════════════════════════════════════
+// HUD
+// ════════════════════════════════════════════════════
+function updateHUD(){
+  const n=STATE.memories.length;
+  $('memCount').textContent=n===0?'No memories yet':n===1?'1 memory':`${n} memories`;
+  updatePlayerStage();
+}
+
+// ════════════════════════════════════════════════════
+// CONTROLS
+// ════════════════════════════════════════════════════
+function setupControls(){
+  document.addEventListener('keydown',e=>{
+    keys[e.code]=true;
+    if(STATE.screen!=='gameScreen')return;
+    const anyModal=['memoryModal','readModal','mapModal','archiveModal','dailyPrompt'].some(id=>$(id).classList.contains('active'));
+    if(e.code==='Escape'){ closeAllModals(); return; }
+    if(anyModal)return;
+    if(e.code==='KeyE')openMemoryModal();
+    if(e.code==='KeyF'){
+      if(nearbyIsland) openRead(nearbyIsland.userData.memory,nearbyIsland.userData.em);
+      else if(STATE.memories.length>0){
+        const m=[...STATE.memories].sort((a,b)=>(b.ts||0)-(a.ts||0))[0];
+        openRead(m,EM[m.emotion]||EM.hope);
+      }
+    }
+    if(e.code==='KeyM'){ renderMap(); openModal('mapModal'); }
+    if(e.code==='KeyJ'){ renderArchive(); openModal('archiveModal'); }
+    if(e.code==='KeyR')openModal('dailyPrompt');
+  });
+  document.addEventListener('keyup',e=>delete keys[e.code]);
+}
+function setupMobileJoystick(){
+  const base=$('joyBase'), thumb=$('joyThumb');
+  let active=false, origin={x:0,y:0};
+  const MAX=38;
+
+  function applyVec(dx,dy){
+    const dist=Math.hypot(dx,dy);
+    const cl=dist>MAX?MAX/dist:1;
+    const cx=dx*cl, cy=dy*cl;
+    thumb.style.transform=`translate(calc(-50% + ${cx}px),calc(-50% + ${cy}px))`;
+    // smooth analog movement, not binary key spoofing
+    moveDir.x=(cx/MAX)*.075;
+    moveDir.z=(cy/MAX)*.075;
+  }
+  function resetVec(){
+    thumb.style.transform='translate(-50%,-50%)';
+    moveDir.x=0; moveDir.z=0;
+  }
+
+  base.addEventListener('pointerdown',e=>{
+    active=true;
+    origin={x:e.clientX,y:e.clientY};
+    base.setPointerCapture(e.pointerId);          // per-event capture (correct)
+  });
+  base.addEventListener('pointermove',e=>{
+    if(!active)return;
+    applyVec(e.clientX-origin.x, e.clientY-origin.y);
+  });
+  base.addEventListener('pointerup',()=>{ active=false; resetVec(); });
+  base.addEventListener('pointercancel',()=>{ active=false; resetVec(); });
+
+  $('actWrite').addEventListener('click',openMemoryModal);
+  $('actRead').addEventListener('click',()=>{
+    if(nearbyIsland){
+      openRead(nearbyIsland.userData.memory, nearbyIsland.userData.em);
+    } else if(STATE.memories.length>0){
+      // fall back to most recent memory
+      const m=[...STATE.memories].sort((a,b)=>(b.ts||0)-(a.ts||0))[0];
+      openRead(m, EM[m.emotion]||EM.hope);
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════
+// MEMORY MODAL
+// ════════════════════════════════════════════════════
+function setupMemoryModal(){
+  document.querySelectorAll('.emBtn').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('.emBtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); STATE.selEmotion=b.dataset.e; }));
+  document.querySelectorAll('.stypeBtn').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('.stypeBtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); STATE.selType=b.dataset.t; }));
+  $('memSubmit').addEventListener('click',submitMemory);
+  $('memCancel').addEventListener('click',closeMemoryModal);
+  $('readClose').addEventListener('click',()=>$('readModal').classList.remove('active'));
+  $('mapClose').addEventListener('click',()=>$('mapModal').classList.remove('active'));
+  $('archClose').addEventListener('click',()=>$('archiveModal').classList.remove('active'));
+  $('dpDismiss').addEventListener('click',()=>{ $('dailyPrompt').classList.remove('active'); showToast('✦ Carry it gently…'); });
+  // side buttons
+  $('btnWrite').addEventListener('click',openMemoryModal);
+  $('btnMap').addEventListener('click',()=>{renderMap();openModal('mapModal');});
+  $('btnJournal').addEventListener('click',()=>{renderArchive();openModal('archiveModal');});
+  $('btnReflect').addEventListener('click',()=>openModal('dailyPrompt'));
+}
+function openMemoryModal(){
+  const n=STATE.memories.length;
+  const nextMilestone=n<3?3:n<7?7:n<13?13:null;
+  $('unlockHint').textContent=nextMilestone?`${nextMilestone-n} more to unlock`:'max unlocked';
+  const ns=calcStage();
+  $('evoHint').textContent=ns>STATE.stage?'accelerating':'steady';
+  openModal('memoryModal');
+  setTimeout(()=>$('memTitle').focus(), 80);
+}
+function closeMemoryModal(){
+  $('memoryModal').classList.remove('active');
+  $('memTitle').value=''; $('memText').value='';
+}
+function submitMemory(){
+  const title=$('memTitle').value.trim(), text=$('memText').value.trim();
+  if(!text){showToast('Write at least one line.',2000);return;}
+  const mem={id:'m'+Date.now(),title:title||'Untitled',text,emotion:STATE.selEmotion,storyType:STATE.selType,ts:Date.now()};
+  STATE.memories.push(mem);
+  STATE.totalEmotions[STATE.selEmotion]=(STATE.totalEmotions[STATE.selEmotion]||0)+1;
+  const prevStage=STATE.stage, ns=calcStage(); STATE.stage=ns; STATE.save();
+  spawnIsland(mem,true); updateBridges(); updateHUD();
+  const n=STATE.memories.length; cameraBaseY=12+n*.7; cameraBaseZ=14+n*.7;
+  closeMemoryModal();
+  // reset selectors to defaults
+  document.querySelectorAll('.emBtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.emBtn[data-e="hope"]').classList.add('active');
+  STATE.selEmotion='hope';
+  document.querySelectorAll('.stypeBtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.stypeBtn[data-t="memory"]').classList.add('active');
+  STATE.selType='memory';
+  if(isMobile()) $('actRead').style.display='flex';
+  if(ns>prevStage){
+    const msgs=['✦ Your inner child begins to glow…','✦ Your world takes form…','✦ Your inner child is fully alive!'];
+    showToast(msgs[ns-2]||'✦ Evolution…');
+  } else {
+    showToast('✦ Memory planted in your world…');
+  }
+}
+function calcStage(){
+  // Stage I: 0-2 memories  Stage II: 3-6  Stage III: 7-12  Stage IV: 13+
+  const n=STATE.memories.length;
+  if(n>=13)return 4; if(n>=7)return 3; if(n>=3)return 2; return 1;
+}
+function openRead(mem,em){
+  em=em||EM[mem.emotion]||EM.hope;
+  $('readBar').style.background=em.grad;
+  $('readH').textContent=mem.title;
+  $('readTag').textContent=em.label; $('readTag').style.background=em.grad; $('readTag').style.color='#fff';
+  const st=STYPES[mem.storyType]||STYPES.memory;
+  $('readType').textContent=st.icon+' '+st.label;
+  $('readText').textContent=mem.text;
+  openModal('readModal');
+}
+
+// ════════════════════════════════════════════════════
+// WORLD MAP
+// ════════════════════════════════════════════════════
+function renderMap(){
+  const host=$('mapCanvas'); host.innerHTML='';
+  const n=STATE.memories.length;
+  const nodes=[
+    {key:'start',  name:'First Island',   x:18,y:55,locked:false,  hint:false},
+    {key:'memory', name:'Memory Forest',  x:38,y:40,locked:n<1,    hint:false},
+    {key:'dream',  name:'Dream Lake',     x:60,y:32,locked:n<3,    hint:true},
+    {key:'shadow', name:'Shadow Valley',  x:72,y:56,locked:n<7,    hint:false},
+    {key:'future', name:'Future Mountain',x:50,y:16,locked:n<13,   hint:true},
+  ];
+  const byKey=Object.fromEntries(nodes.map(nd=>[nd.key,nd]));
+  [['start','memory'],['memory','dream'],['dream','shadow'],['shadow','future']].forEach(([a,b])=>{
+    const A=byKey[a],B=byKey[b];
+    const dx=B.x-A.x,dy=B.y-A.y,len=Math.sqrt(dx*dx+dy*dy),ang=Math.atan2(dy,dx)*(180/Math.PI);
+    const p=document.createElement('div'); p.className='mpath'+(A.locked||B.locked?' locked':'');
+    p.style.cssText=`left:${A.x}%;top:${A.y}%;width:${len}%;transform:translate(0,-50%) rotate(${ang}deg)`;
+    host.appendChild(p);
+  });
+  nodes.forEach(nd=>{
+    const dot=document.createElement('div'); dot.className='mnode'+(nd.locked?' locked':nd.hint?' hint':'');
+    dot.style.cssText=`left:${nd.x}%;top:${nd.y}%`;
+    host.appendChild(dot);
+    const lbl=document.createElement('div'); lbl.className='nodeLabel'; lbl.style.cssText=`left:${nd.x}%;top:${nd.y}%`;
+    lbl.textContent=nd.locked?'???':nd.name; host.appendChild(lbl);
+  });
+}
+
+// ════════════════════════════════════════════════════
+// JOURNAL
+// ════════════════════════════════════════════════════
+function renderArchive(){
+  const list=$('archiveList'); list.innerHTML='';
+  if(STATE.memories.length===0){ const e=document.createElement('div'); e.className='miniNote'; e.textContent='No memories yet. Write one to plant your first island.'; list.appendChild(e); return; }
+  [...STATE.memories].sort((a,b)=>(b.ts||0)-(a.ts||0)).forEach(m=>{
+    const it=document.createElement('div'); it.className='jItem';
+    it.innerHTML=`<div class="jt">${m.title||'Untitled'}</div><div class="jm">${(m.text||'').slice(0,120)}${m.text.length>120?'…':''}</div><div class="je">${(m.emotion||'hope').toUpperCase()}</div>`;
+    it.addEventListener('click',()=>openRead(m,EM[m.emotion]||EM.hope));
+    list.appendChild(it);
+  });
+}
+
+// ════════════════════════════════════════════════════
+// DAILY REFLECTION
+// ════════════════════════════════════════════════════
+const REFLECTIONS=[
+  'What feeling have you been carrying that you haven\'t yet put into words?',
+  'Which memory from your past still glows warmly inside you?',
+  'What dream left an impression on your waking heart?',
+  'If your inner child could speak today, what would they ask for?',
+  'What are you curious about that feels like a secret?',
+  'Which fear, if understood, might become a hidden doorway?',
+  'What moment today made you feel most like yourself?',
+  'Is there something you\'ve forgotten about yourself that\'s waiting to be remembered?',
+  'What emotion have you been avoiding — and what might it want to show you?',
+  'If your inner world had weather today, what would the forecast be?',
+];
+function openDailyPrompt(){ $('dpQ').textContent=REFLECTIONS[Math.floor(Math.random()*REFLECTIONS.length)]; openModal('dailyPrompt'); }
+
+// ════════════════════════════════════════════════════
+// ANIMATION LOOP
+// ════════════════════════════════════════════════════
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=clock.getDelta(), time=clock.getElapsedTime();
+  const anyModal=['memoryModal','readModal','mapModal','archiveModal','dailyPrompt'].some(id=>$(id).classList.contains('active'));
+  if(!anyModal){
+    let dx=0,dz=0;
+    if(keys['KeyW']||keys['ArrowUp'])dz-=.07;
+    if(keys['KeyS']||keys['ArrowDown'])dz+=.07;
+    if(keys['KeyA']||keys['ArrowLeft'])dx-=.07;
+    if(keys['KeyD']||keys['ArrowRight'])dx+=.07;
+    dx+=moveDir.x; dz+=moveDir.z;
+    if(dx||dz){ playerGroup.position.x+=dx; playerGroup.position.z+=dz; playerGroup.rotation.y=Math.atan2(dx,dz); playerGroup.position.y=.78+Math.sin(time*8)*.04; }
+    STATE.playerPos={x:playerGroup.position.x,y:playerGroup.position.y,z:playerGroup.position.z};
+  }
+  const tx=playerGroup.position.x, tz=playerGroup.position.z+cameraBaseZ, ty=playerGroup.position.y+cameraBaseY;
+  camera.position.x+=(tx-camera.position.x)*.05; camera.position.y+=(ty-camera.position.y)*.05; camera.position.z+=(tz-camera.position.z)*.05;
+  camera.lookAt(playerGroup.position.x,playerGroup.position.y+1,playerGroup.position.z);
+  if(scene.userData.portalRing){ scene.userData.portalRing.rotation.y=time*.38; scene.userData.portalRing.scale.setScalar(1+Math.sin(time*1.4)*.04); }
+  if(scene.userData.rimLight) scene.userData.rimLight.intensity=2.5+Math.sin(time*2)*.8;
+  const pp=particleSystem.geometry.attributes.position.array;
+  for(let i=0;i<pp.length;i+=3){ pp[i+1]+=Math.sin(time*.5+i)*.003; if(pp[i+1]>32)pp[i+1]=-2; }
+  particleSystem.geometry.attributes.position.needsUpdate=true;
+  islands.forEach((isl,idx)=>{
+    if(!isl.userData.baseYSet){isl.userData.baseY=isl.position.y;isl.userData.baseYSet=true;}
+    isl.position.y=isl.userData.baseY+Math.sin(time*.6+idx)*.16;
+    isl.children.forEach(c=>{ if(c.userData.firefly){ c.position.y=1.5+Math.sin(time*1.5+c.userData.phase)*.6; c.position.x=Math.sin(time*.8+c.userData.phase)*1.8; c.position.z=Math.cos(time*.7+c.userData.phase)*1.8; } });
+  });
+  playerGlowParticles.forEach(p=>{ const d=p.userData; d.angle+=d.speed*.022; p.position.x=Math.cos(d.angle)*d.radius; p.position.z=Math.sin(d.angle)*d.radius; p.position.y=d.height+Math.sin(time*2+d.phase)*.16; p.material.opacity=.4+Math.sin(time*3+d.phase)*.45; });
+  nearbyIsland=null; let minD=5;
+  islands.forEach(isl=>{ const d=playerGroup.position.distanceTo(isl.position); if(d<minD){minD=d;nearbyIsland=isl;} });
+  $('actRead').style.display=(isMobile()&&STATE.memories.length>0)?'flex':'none';
+  if(Math.floor(time)%4===0)detectRegion();
+  updateWeather(time);
+  renderer.render(scene,camera);
+}
+function setupResize(){ window.addEventListener('resize',()=>{ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); }); }
+
+// ════════════════════════════════════════════════════
+// MAIN BIND
+// ════════════════════════════════════════════════════
+function bind(){
+  seedStars(); SETTINGS.load(); syncSettingsUI();
+
+  // Teaser
+  initTeaser();
+
+  // Entrance → char create (new) or onboarding (continue)
+  $('btnStart').addEventListener('click',()=>{ showEntrance_to_CharCreate(); });
+  $('btnContinue').addEventListener('click',()=>{ STATE.load(); showScreen('onboarding'); slideIdx=0; renderOnboarding(); $('onbNext').dataset.cont='1'; });
+
+  function showEntrance_to_CharCreate(){
+    // check if we already have a name (returning = no, new = yes)
+    showCharCreate();
+  }
+
+  // char create submit
+  $('ccEnterBtn').addEventListener('click',()=>{
+    STATE.childName=($('childName').value.trim()||'Little One');
+    STATE.childGender=selectedGender;
+    hideCharCreate(()=>{ showScreen('onboarding'); slideIdx=0; renderOnboarding(); });
+  });
+
+  // Settings
+  $('btnSettings').addEventListener('click',()=>openModal('settingsModal'));
+  $('settingsClose').addEventListener('click',()=>$('settingsModal').classList.remove('active'));
+  $('btnAbout').addEventListener('click',()=>openModal('aboutModal'));
+  $('aboutClose').addEventListener('click',()=>$('aboutModal').classList.remove('active'));
+  $('swSound').addEventListener('click',()=>{ SETTINGS.sound=!SETTINGS.sound; SETTINGS.save(); syncSettingsUI(); if(SETTINGS.sound)startAmbient();else stopAmbient(); showToast('Ambient: '+(SETTINGS.sound?'ON':'OFF'),1600); });
+  $('swMotion').addEventListener('click',()=>{ SETTINGS.reduceMotion=!SETTINGS.reduceMotion; SETTINGS.save(); syncSettingsUI(); showToast('Motion: '+(SETTINGS.reduceMotion?'Reduced':'Normal'),1600); });
+  $('swWhisper').addEventListener('click',()=>{ SETTINGS.whispers=!SETTINGS.whispers; SETTINGS.save(); syncSettingsUI(); if(SETTINGS.whispers)startWhispers();else stopWhispers(); showToast('Whispers: '+(SETTINGS.whispers?'ON':'OFF'),1600); });
+
+  // Onboarding nav
+  $('onbSkip').addEventListener('click',()=>{ const cont=$('onbNext').dataset.cont==='1'; $('onbNext').dataset.cont=''; startGame(cont); });
+  $('onbPrev').addEventListener('click',()=>{ slideIdx=Math.max(0,slideIdx-1); renderOnboarding(); });
+  $('onbNext').addEventListener('click',()=>{
+    if(slideIdx<SLIDES.length-1){ slideIdx++; renderOnboarding(); }
+    else{ const cont=$('onbNext').dataset.cont==='1'; $('onbNext').dataset.cont=''; startGame(cont); }
+  });
+
+  // Daily prompt dismiss
+  $('dpDismiss').addEventListener('click',()=>{ $('dailyPrompt').classList.remove('active'); showToast('✦ Carry it gently…'); });
+}
+
+bind();
+</script>
+</body>
+</html>
