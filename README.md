@@ -4,11 +4,9 @@
 
 **Your inner parts have something to say.**
 
-InnerWorld is an AI system for self-understanding that models the mind as a dynamic set of internal “parts,” inspired by Internal Family Systems (IFS).
+InnerWorld is an AI system for self-understanding that models the mind as a set of internal “parts,” inspired by Internal Family Systems (IFS).
 
-Instead of treating user input as a single stream, the system performs semantic decomposition to map input into part-specific representations. Each part is stored as a persistent entity with its own memory, state, and evolution over time.
-
-By enabling context-aware dialogue across these parts, InnerWorld allows users to externalize internal conflicts, track recurring patterns, and build a structured understanding of their inner system — beyond static journaling or single-threaded chat.
+It helps users externalize internal conflicts, track patterns over time, and build a clearer understanding of their inner system.
 
 [**→ Visit Landing Page**](https://stalisnguyen.github.io/innerworld) · [**→ Join the Waitlist**](https://tally.so/r/68v60Y)
 
