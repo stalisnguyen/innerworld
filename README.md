@@ -9,6 +9,8 @@ Built on Internal Family Systems (IFS) — the evidence-based framework trusted 
 
 [**→ Visit Landing Page**](https://stalisnguyen.github.io/innerworld) · [**→ Join the Waitlist**](https://tally.so/r/68v60Y)
 
+![InnerWorld Landing Page](screenshot.png)
+
 </div>
 
 ---
