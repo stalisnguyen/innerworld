@@ -4,9 +4,9 @@
 
 **Your inner parts have something to say.**
 
-InnerWorld is an AI system for self-understanding that models the mind as a dynamic set of internal “parts,” inspired by IFS.
+InnerWorld is an AI system for self-understanding that models the mind as a dynamic set of internal “parts,” inspired by Internal Family Systems (IFS).
 
-Instead of treating user input as a single stream, the system performs semantic decomposition to map each input into part-specific representations. Each part is stored as a persistent entity with its own memory, state, and evolution over time.
+Instead of treating user input as a single stream, the system performs semantic decomposition to map input into part-specific representations. Each part is stored as a persistent entity with its own memory, state, and evolution over time.
 
 By enabling context-aware dialogue across these parts, InnerWorld allows users to externalize internal conflicts, track recurring patterns, and build a structured understanding of their inner system — beyond static journaling or single-threaded chat.
 
@@ -20,53 +20,98 @@ By enabling context-aware dialogue across these parts, InnerWorld allows users t
 
 ## What is InnerWorld?
 
-InnerWorld is an AI companion that helps you discover, dialogue with, and understand the different parts of yourself — the protector, the critic, the dreamer. Each one carries wisdom. InnerWorld helps you listen.
+InnerWorld is an AI companion that helps you understand yourself through dialogue with your inner parts — the protector, the critic, the dreamer.
 
-Unlike generic chatbots, InnerWorld builds **longitudinal relationships** with your inner parts. It remembers what your Protector said last week. It notices when your Critic softens. It tracks growth you might not see yourself.
+Instead of a single, continuous “self,” InnerWorld treats the mind as a system of interacting parts. Each part carries its own role, memory, and perspective.
 
-## The Problem
+Over time, InnerWorld builds longitudinal awareness — tracking how these parts evolve, interact, and influence your decisions.
 
-Self-understanding is hard to do alone. Therapy is invaluable but not always accessible. Journaling helps but doesn't talk back. Meditation quiets the mind but doesn't always help you understand what it's saying.
+---
 
-InnerWorld bridges that gap.
+## Core Idea
+
+Most tools treat users as a single entity.
+
+InnerWorld does not.
+
+It models the mind as a **multi-entity system**, where internal parts can:
+- hold distinct states and memories  
+- persist over time  
+- interact through structured dialogue  
+
+This creates a **cognitive layer on top of standard AI interaction**, enabling deeper reflection than linear chat or journaling.
+
+---
 
 ## How It Works
 
-**1. Name your parts** — Identify the inner voices you already hear. Give them names. Acknowledge they exist.
+**1. Decompose**  
+User input is semantically analyzed and mapped into distinct internal parts.
 
-**2. Dialogue with them** — Have real conversations with each part through AI. Ask your Protector why it's always on guard. Listen to what your Critic is actually afraid of.
+**2. Persist**  
+Each part is stored as an entity with memory, state, and history.
 
-**3. Grow over time** — InnerWorld remembers. Your parts evolve as you do. Patterns surface. What once felt chaotic starts to make sense.
+**3. Interact**  
+Users engage in structured, context-aware dialogue with and between parts.
+
+**4. Evolve**  
+Patterns emerge over time as parts shift, repeat, or resolve.
+
+---
+
+## Why It Matters
+
+- Journaling is static  
+- Chatbots are linear  
+- Self-perception is fragmented  
+
+InnerWorld makes internal structure visible — and interactive.
+
+---
 
 ## Grounded in Science
 
-InnerWorld is built on **Internal Family Systems (IFS)**, developed by Dr. Richard Schwartz in the 1980s. IFS is recognized as an evidence-based practice by NREPP and is used by thousands of licensed therapists worldwide.
+InnerWorld is inspired by **Internal Family Systems (IFS)**, developed by Dr. Richard Schwartz.
 
-The AI acts as a **facilitator, not a therapist** — it holds space for your inner dialogue without diagnosing, interpreting, or prescribing. InnerWorld is designed to complement professional care, not replace it.
+The system is designed as a **facilitator, not a therapist**:
+- no diagnosis  
+- no prescription  
+- no replacement for professional care  
+
+It simply helps users **observe and interact with their inner system more clearly**.
+
+---
 
 ## Privacy
 
 Your inner world stays yours.
 
-- 🔒 All conversations encrypted in transit and at rest
-- 🚫 Never sold to third parties, never used for advertising
-- 🤖 Never used to train AI models
-- 🗑️ Export or delete your data anytime, no questions asked
+- 🔒 Encrypted in transit and at rest  
+- 🚫 Never sold, never used for ads  
+- 🤖 Never used for model training  
+- 🗑️ Full control: export or delete anytime  
+
+---
 
 ## Built For
 
-- **Individuals** — Anyone curious about self-understanding who wants a daily companion for honest, evolving self-dialogue.
-- **Practitioners** — Therapists, coaches, and facilitators who want to give clients a structured space for parts work between sessions.
+- **Individuals** — seeking structured self-understanding  
+- **Practitioners** — extending parts work beyond sessions  
+
+---
 
 ## Status
 
-🚧 **Early Development** — InnerWorld is currently in the concept and PoC phase.
+🚧 Early stage — concept + PoC
 
-Join the [waitlist](https://tally.so/r/68v60Y) to get early access, shape the product, and be part of the community.
+Join the waitlist to get early access and help shape the system.
+
+---
 
 ## Contact
 
-Built by **Stalis Nguyen** · [Join Waitlist](https://tally.so/r/68v60Y)
+Built by **Stalis Nguyen**  
+[Join Waitlist](https://tally.so/r/68v60Y)
 
 ---
 
