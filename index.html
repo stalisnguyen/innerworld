@@ -135,7 +135,11 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 .hero h1 em{font-style:italic;color:var(--accent)}
 .hero p.subtitle{
   font-size:1.15rem;color:var(--text-dim);
-  max-width:560px;margin:0 auto 48px;line-height:1.7;font-weight:300;
+  max-width:620px;margin:0 auto 24px;line-height:1.7;font-weight:300;
+}
+.hero p.subtitle-meta{
+  font-size:0.9rem;color:var(--text-muted);
+  max-width:560px;margin:0 auto 48px;line-height:1.6;font-weight:300;
 }
 .cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 
@@ -165,6 +169,39 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 .step h3{font-family:var(--serif);font-size:1.25rem;margin-bottom:12px;font-weight:400}
 .step p{color:var(--text-dim);font-size:0.9rem;line-height:1.65;font-weight:300}
 
+/* What's Inside (capabilities) */
+.capabilities{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.cap-card{
+  background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);
+  border-radius:var(--radius);padding:32px 28px;
+  transition:border-color 0.3s,transform 0.3s;
+  display:flex;flex-direction:column;gap:14px;
+}
+.cap-card:hover{border-color:rgba(196,166,122,0.2);transform:translateY(-3px)}
+.cap-card.featured{grid-column:span 2}
+.cap-symbol{
+  font-size:1.4rem;color:var(--accent);
+  width:44px;height:44px;border-radius:10px;
+  background:var(--accent-soft);
+  display:flex;align-items:center;justify-content:center;
+}
+.cap-card h4{font-family:var(--serif);font-size:1.15rem;font-weight:400}
+.cap-card p{color:var(--text-dim);font-size:0.88rem;line-height:1.65;font-weight:300}
+
+.product-shot{
+  width:100%;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(0,0,0,0.25);
+  display:block;margin-top:8px;
+}
+.map-illustration{
+  width:100%;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:radial-gradient(ellipse at center,rgba(196,166,122,0.03) 0%,rgba(0,0,0,0.25) 70%);
+  padding:16px;margin-top:8px;
+}
+.map-illustration svg{width:100%;height:auto;display:block}
+
 /* Preview */
 .preview-card{
   background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);
@@ -172,6 +209,7 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
   display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
 }
 .preview-text h2{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:16px;font-weight:400}
+.preview-text h2 em{font-style:italic;color:var(--accent)}
 .preview-text p{color:var(--text-dim);font-size:0.95rem;line-height:1.7;margin-bottom:24px;font-weight:300}
 .feature-tags{display:flex;gap:8px;flex-wrap:wrap}
 .feature-tag{
@@ -181,20 +219,70 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 }
 .chat-mock{
   background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);
-  border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;
+  border-radius:16px;padding:0;
+  display:grid;grid-template-columns:140px 1fr;
+  overflow:hidden;min-height:340px;
+}
+.parts-sidebar{
+  background:rgba(0,0,0,0.2);
+  border-right:1px solid rgba(255,255,255,0.05);
+  padding:16px 10px;display:flex;flex-direction:column;gap:4px;
+}
+.parts-sidebar-label{
+  font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-muted);padding:4px 8px 10px;font-weight:400;
+}
+.part-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:8px;
+  font-size:0.78rem;color:var(--text-dim);
+  transition:background 0.3s;cursor:default;
+}
+.part-item:hover{background:rgba(255,255,255,0.02)}
+.part-item.active{
+  background:rgba(122,156,180,0.1);
+  border:1px solid rgba(122,156,180,0.2);
+  color:var(--text);
+}
+.part-item.muted{opacity:0.5}
+.part-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  box-shadow:0 0 8px currentColor;
+}
+.part-label{flex:1;font-weight:400}
+.part-meta{font-size:0.65rem;color:var(--text-muted)}
+
+.chat-thread{
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+  background:rgba(0,0,0,0.1);
+}
+.chat-thread-header{
+  display:flex;align-items:center;gap:8px;
+  padding-bottom:12px;margin-bottom:4px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.82rem;color:var(--text);
+  font-family:var(--serif);font-style:italic;
 }
 .chat-msg{
-  max-width:85%;padding:12px 18px;border-radius:16px;
-  font-size:0.88rem;line-height:1.55;animation:fadeUp 0.6s ease-out both;
+  max-width:85%;padding:12px 16px;border-radius:14px;
+  font-size:0.82rem;line-height:1.55;animation:fadeUp 0.6s ease-out both;
 }
-.chat-msg:nth-child(1){animation-delay:0.2s}
-.chat-msg:nth-child(2){animation-delay:0.8s}
-.chat-msg:nth-child(3){animation-delay:1.4s}
-.chat-msg:nth-child(4){animation-delay:2s}
+.chat-msg:nth-child(2){animation-delay:0.2s}
+.chat-msg:nth-child(3){animation-delay:0.9s}
+.chat-msg:nth-child(4){animation-delay:1.6s}
+.chat-msg:nth-child(5){animation-delay:2.3s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .msg-user{align-self:flex-end;background:var(--accent-soft);border:1px solid rgba(196,166,122,0.15);color:var(--text)}
-.msg-part{align-self:flex-start;background:rgba(122,156,180,0.08);border:1px solid rgba(122,156,180,0.12);color:var(--text-dim)}
-.msg-part .part-name{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--cool);margin-bottom:4px}
+.msg-part{align-self:flex-start;padding:12px 16px}
+.msg-part .part-name{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.msg-protector{background:rgba(212,165,116,0.08);border:1px solid rgba(212,165,116,0.15);color:var(--text-dim)}
+.msg-protector .part-name{color:var(--warm)}
+.msg-critic{background:rgba(122,156,180,0.08);border:1px solid rgba(122,156,180,0.15);color:var(--text-dim)}
+.msg-critic .part-name{color:var(--cool)}
+.msg-child{background:rgba(122,180,138,0.08);border:1px solid rgba(122,180,138,0.15);color:var(--text-dim)}
+.msg-child .part-name{color:var(--sage)}
+.msg-dreamer{background:rgba(180,122,138,0.08);border:1px solid rgba(180,122,138,0.15);color:var(--text-dim)}
+.msg-dreamer .part-name{color:var(--rose)}
 
 /* Science */
 .science-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
@@ -222,7 +310,10 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
   border-radius:var(--radius);padding:32px 24px;text-align:center;transition:border-color 0.3s;
 }
 .privacy-item:hover{border-color:rgba(122,180,138,0.2)}
-.privacy-icon{font-size:1.6rem;margin-bottom:16px;display:block}
+.privacy-symbol{
+  font-size:1.5rem;color:var(--accent);margin-bottom:16px;display:block;
+  font-family:var(--serif);
+}
 .privacy-item h4{font-size:0.92rem;margin-bottom:8px;font-weight:500}
 .privacy-item p{color:var(--text-dim);font-size:0.82rem;line-height:1.6;font-weight:300}
 .privacy-note{text-align:center;margin-top:32px;color:var(--text-muted);font-size:0.85rem;font-style:italic;font-weight:300}
@@ -234,8 +325,16 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
   border-radius:var(--radius);padding:36px 32px;transition:border-color 0.4s;
 }
 .audience-card:hover{border-color:rgba(196,166,122,0.15)}
-.audience-card h3{font-family:var(--serif);font-size:1.2rem;margin-bottom:12px;font-weight:400;display:flex;align-items:center;gap:10px}
-.audience-card p{color:var(--text-dim);font-size:0.9rem;line-height:1.65;font-weight:300}
+.audience-card h3{font-family:var(--serif);font-size:1.2rem;margin-bottom:16px;font-weight:400;display:flex;align-items:center;gap:10px}
+.audience-card p{color:var(--text-dim);font-size:0.9rem;line-height:1.65;font-weight:300;margin-bottom:16px}
+.audience-card ul{list-style:none;padding:0;margin-top:12px}
+.audience-card ul li{
+  color:var(--text-dim);font-size:0.85rem;line-height:1.7;font-weight:300;
+  padding-left:18px;position:relative;margin-bottom:6px;
+}
+.audience-card ul li::before{
+  content:'◦';color:var(--accent);position:absolute;left:0;top:0;
+}
 
 /* Differentiators */
 .differ-items{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;text-align:left}
@@ -271,13 +370,27 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
   padding:24px 0;cursor:pointer;
   display:flex;justify-content:space-between;align-items:center;
   font-size:1rem;font-weight:400;transition:color 0.3s;user-select:none;
+  gap:16px;
 }
 .faq-q:hover{color:var(--accent)}
-.faq-arrow{font-size:0.8rem;color:var(--text-muted);transition:transform 0.3s}
+.faq-arrow{font-size:0.8rem;color:var(--text-muted);transition:transform 0.3s;flex-shrink:0}
 .faq-item.open .faq-arrow{transform:rotate(180deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.4s ease}
-.faq-item.open .faq-a{max-height:300px;padding-bottom:24px}
+.faq-item.open .faq-a{max-height:600px;padding-bottom:24px}
 .faq-a p{color:var(--text-dim);font-size:0.9rem;line-height:1.7;font-weight:300}
+.pricing-tiers{
+  list-style:none;padding:0;margin:14px 0 0 0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.pricing-tiers li{
+  color:var(--text-dim);font-size:0.88rem;line-height:1.6;font-weight:300;
+  padding:12px 16px;border-radius:10px;
+  background:var(--bg-glass);border:1px solid rgba(255,255,255,0.04);
+}
+.pricing-tiers li strong{
+  color:var(--accent);font-weight:500;font-family:var(--serif);
+  font-size:0.95rem;margin-right:4px;
+}
 
 /* Waitlist */
 .waitlist{padding:100px 0 60px;text-align:center}
@@ -293,15 +406,34 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 .waitlist-perk{font-size:0.8rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
 .waitlist-perk .check{color:var(--sage);font-size:0.9rem}
 
-footer{padding:40px 0;text-align:center;border-top:1px solid rgba(255,255,255,0.04)}
+footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,0.04);margin-top:40px}
+.footer-content{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap}
+.footer-links a{
+  color:var(--text-dim);text-decoration:none;font-size:0.82rem;
+  transition:color 0.3s;
+}
+.footer-links a:hover{color:var(--accent)}
 footer p{color:var(--text-muted);font-size:0.8rem;font-weight:300}
-footer a{color:var(--text-dim);text-decoration:none}
-footer a:hover{color:var(--accent)}
 
 @media(max-width:768px){
   .hero{padding:64px 0 48px}
   .steps{grid-template-columns:1fr}
+  .capabilities{grid-template-columns:1fr}
+  .cap-card.featured{grid-column:span 1}
   .preview-card{grid-template-columns:1fr;padding:28px}
+  .chat-mock{grid-template-columns:1fr;min-height:auto}
+  .parts-sidebar{
+    flex-direction:row;overflow-x:auto;
+    border-right:none;border-bottom:1px solid rgba(255,255,255,0.05);
+    padding:12px;gap:6px;
+  }
+  .parts-sidebar-label{display:none}
+  .part-item{flex-shrink:0;padding:6px 10px}
+  .part-meta{display:none}
   .science-grid{grid-template-columns:1fr}
   .privacy-grid{grid-template-columns:1fr 1fr}
   .audience-grid{grid-template-columns:1fr}
@@ -309,6 +441,7 @@ footer a:hover{color:var(--accent)}
   .waitlist-box{padding:40px 24px}
   .founder-card{padding:36px 28px}
   nav .nav-links{gap:16px}
+  .footer-content{flex-direction:column;text-align:center}
 }
 @media(max-width:480px){
   .privacy-grid{grid-template-columns:1fr}
@@ -328,6 +461,7 @@ footer a:hover{color:var(--accent)}
   <nav>
     <div class="logo"><img src="logo.png" alt="InnerWorld" class="logo-img">InnerWorld</div>
     <div class="nav-links">
+      <a href="#inside">What's Inside</a>
       <a href="#science">Science</a>
       <a href="#privacy">Privacy</a>
       <a href="#faq">FAQ</a>
@@ -339,17 +473,19 @@ footer a:hover{color:var(--accent)}
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <div class="hero-badge">AI-Powered Parts Psychology</div>
+    <div class="hero-badge">AI-Powered Parts Psychology · Built on IFS</div>
     <h1>Your inner parts<br>have something to <em>say</em></h1>
     <p class="subtitle">
-      An AI companion that helps you discover, dialogue with, and understand 
-      the different parts of yourself — the protector, the critic, the dreamer. 
-      Each one carries wisdom. InnerWorld helps you listen.
+      A daily AI companion for parts-based self-reflection — meet your inner voices,
+      map them in your own world, and build a longitudinal relationship with each one.
+    </p>
+    <p class="subtitle-meta">
+      Grounded in Internal Family Systems. Designed for individuals and practitioners.
     </p>
     <div class="cta-group">
       <a href="https://tally.so/r/68v60Y" target="_blank" class="btn btn-primary">
-    Join the Waitlist
-  </a>
+        Join the Waitlist
+      </a>
       <a href="#how" class="btn btn-ghost">How it works</a>
     </div>
   </div>
@@ -361,7 +497,7 @@ footer a:hover{color:var(--accent)}
     <div class="divider" style="margin-bottom:48px"></div>
     <p class="section-label">The Gap</p>
     <blockquote>
-      "I know I should understand myself better, but therapy is expensive, 
+      "I know I should understand myself better, but therapy is expensive,
       journaling feels lonely, and meditation doesn't give me <strong>answers</strong>."
     </blockquote>
   </div>
@@ -396,6 +532,200 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
+<!-- WHAT'S INSIDE -->
+<section class="section-spacing reveal" id="inside">
+  <div class="container">
+    <p class="section-label">What's Inside</p>
+    <h2 class="section-title">More than a chat — a whole inner world</h2>
+    <p class="section-sub">
+      InnerWorld isn't a single conversation. It's a system that grows with you across time,
+      surfacing patterns and giving each of your parts a place to live.
+    </p>
+
+    <div class="capabilities">
+
+      <div class="cap-card featured">
+        <div class="cap-symbol">◇</div>
+        <h4>Spatial parts map</h4>
+        <p>
+          A canvas-based inner world where you place each part in your own landscape.
+          Move them, group them, see how they relate. Your inner system, made visible.
+        </p>
+        <div class="map-illustration">
+          <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" aria-label="Conceptual illustration of the Inner World parts map">
+            <defs>
+              <radialGradient id="warmGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#d4a574" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#d4a574" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="coolGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#7a9cb4" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#7a9cb4" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="roseGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#b47a8a" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#b47a8a" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="sageGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#7ab48a" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#7ab48a" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="selfGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#c4a67a" stop-opacity="0.55"/>
+                <stop offset="60%" stop-color="#c4a67a" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#c4a67a" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Soft background cluster zones -->
+            <ellipse cx="160" cy="140" rx="130" ry="90" fill="rgba(212,165,116,0.025)"/>
+            <ellipse cx="540" cy="130" rx="120" ry="85" fill="rgba(122,156,180,0.025)"/>
+            <ellipse cx="350" cy="260" rx="160" ry="75" fill="rgba(122,180,138,0.02)"/>
+
+            <!-- Connection lines -->
+            <g stroke="rgba(196,166,122,0.1)" stroke-width="1" fill="none" stroke-dasharray="2,4">
+              <!-- Self center connects to major parts -->
+              <path d="M 350 180 Q 260 140 180 120"/>
+              <path d="M 350 180 Q 280 110 220 80"/>
+              <path d="M 350 180 Q 450 130 530 100"/>
+              <path d="M 350 180 Q 480 150 580 160"/>
+              <path d="M 350 180 Q 310 240 260 280"/>
+              <path d="M 350 180 Q 400 240 450 270"/>
+              <!-- Cross connections -->
+              <path d="M 180 120 Q 200 180 260 280" stroke="rgba(212,165,116,0.08)"/>
+              <path d="M 530 100 Q 560 150 580 160" stroke="rgba(122,156,180,0.08)"/>
+              <path d="M 260 280 Q 360 300 450 270" stroke="rgba(122,180,138,0.08)"/>
+              <path d="M 120 210 Q 180 180 180 120" stroke="rgba(212,165,116,0.08)"/>
+              <path d="M 620 230 Q 600 190 580 160" stroke="rgba(122,156,180,0.08)"/>
+            </g>
+
+            <!-- The Self (center, larger, golden) -->
+            <g>
+              <circle cx="350" cy="180" r="60" fill="url(#selfGlow)"/>
+              <circle cx="350" cy="180" r="24" fill="rgba(196,166,122,0.22)" stroke="rgba(196,166,122,0.7)" stroke-width="1.4"/>
+              <text x="350" y="184" text-anchor="middle" fill="#c4a67a" font-family="Playfair Display, serif" font-size="12" font-style="italic">Self</text>
+            </g>
+
+            <!-- WARM CLUSTER (left) - Protective parts -->
+            <g>
+              <circle cx="180" cy="120" r="44" fill="url(#warmGlow)"/>
+              <circle cx="180" cy="120" r="20" fill="rgba(212,165,116,0.18)" stroke="rgba(212,165,116,0.5)" stroke-width="1.2"/>
+              <text x="180" y="124" text-anchor="middle" fill="#d4a574" font-family="Playfair Display, serif" font-size="11" font-style="italic">Protector</text>
+            </g>
+            <g>
+              <circle cx="220" cy="80" r="36" fill="url(#warmGlow)"/>
+              <circle cx="220" cy="80" r="16" fill="rgba(212,165,116,0.16)" stroke="rgba(212,165,116,0.45)" stroke-width="1.1"/>
+              <text x="220" y="84" text-anchor="middle" fill="#d4a574" font-family="Playfair Display, serif" font-size="10" font-style="italic">Planner</text>
+            </g>
+            <g>
+              <circle cx="120" cy="210" r="38" fill="url(#warmGlow)"/>
+              <circle cx="120" cy="210" r="17" fill="rgba(212,165,116,0.16)" stroke="rgba(212,165,116,0.45)" stroke-width="1.1"/>
+              <text x="120" y="214" text-anchor="middle" fill="#d4a574" font-family="Playfair Display, serif" font-size="10" font-style="italic">Pleaser</text>
+            </g>
+
+            <!-- COOL CLUSTER (right) - Critical / analytical parts -->
+            <g>
+              <circle cx="530" cy="100" r="42" fill="url(#coolGlow)"/>
+              <circle cx="530" cy="100" r="19" fill="rgba(122,156,180,0.18)" stroke="rgba(122,156,180,0.5)" stroke-width="1.2"/>
+              <text x="530" y="104" text-anchor="middle" fill="#7a9cb4" font-family="Playfair Display, serif" font-size="11" font-style="italic">Critic</text>
+            </g>
+            <g>
+              <circle cx="580" cy="160" r="34" fill="url(#coolGlow)"/>
+              <circle cx="580" cy="160" r="15" fill="rgba(122,156,180,0.16)" stroke="rgba(122,156,180,0.45)" stroke-width="1.1"/>
+              <text x="580" y="163" text-anchor="middle" fill="#7a9cb4" font-family="Playfair Display, serif" font-size="9" font-style="italic">Analyst</text>
+            </g>
+            <g>
+              <circle cx="620" cy="230" r="32" fill="url(#coolGlow)"/>
+              <circle cx="620" cy="230" r="14" fill="rgba(122,156,180,0.16)" stroke="rgba(122,156,180,0.45)" stroke-width="1.1"/>
+              <text x="620" y="233" text-anchor="middle" fill="#7a9cb4" font-family="Playfair Display, serif" font-size="9" font-style="italic">Skeptic</text>
+            </g>
+
+            <!-- ROSE CLUSTER (top) - Exiles / tender parts -->
+            <g>
+              <circle cx="380" cy="70" r="36" fill="url(#roseGlow)"/>
+              <circle cx="380" cy="70" r="16" fill="rgba(180,122,138,0.18)" stroke="rgba(180,122,138,0.5)" stroke-width="1.1"/>
+              <text x="380" y="74" text-anchor="middle" fill="#b47a8a" font-family="Playfair Display, serif" font-size="10" font-style="italic">Dreamer</text>
+            </g>
+            <g>
+              <circle cx="450" cy="60" r="30" fill="url(#roseGlow)"/>
+              <circle cx="450" cy="60" r="13" fill="rgba(180,122,138,0.16)" stroke="rgba(180,122,138,0.45)" stroke-width="1"/>
+              <text x="450" y="63" text-anchor="middle" fill="#b47a8a" font-family="Playfair Display, serif" font-size="9" font-style="italic">Longing</text>
+            </g>
+
+            <!-- SAGE CLUSTER (bottom) - Grounded / playful parts -->
+            <g>
+              <circle cx="260" cy="280" r="38" fill="url(#sageGlow)"/>
+              <circle cx="260" cy="280" r="17" fill="rgba(122,180,138,0.18)" stroke="rgba(122,180,138,0.5)" stroke-width="1.2"/>
+              <text x="260" y="284" text-anchor="middle" fill="#7ab48a" font-family="Playfair Display, serif" font-size="10" font-style="italic">Inner Child</text>
+            </g>
+            <g>
+              <circle cx="450" cy="270" r="34" fill="url(#sageGlow)"/>
+              <circle cx="450" cy="270" r="15" fill="rgba(122,180,138,0.16)" stroke="rgba(122,180,138,0.45)" stroke-width="1.1"/>
+              <text x="450" y="273" text-anchor="middle" fill="#7ab48a" font-family="Playfair Display, serif" font-size="10" font-style="italic">Wanderer</text>
+            </g>
+            <g>
+              <circle cx="350" cy="310" r="28" fill="url(#sageGlow)"/>
+              <circle cx="350" cy="310" r="12" fill="rgba(122,180,138,0.14)" stroke="rgba(122,180,138,0.4)" stroke-width="1"/>
+              <text x="350" y="313" text-anchor="middle" fill="#7ab48a" font-family="Playfair Display, serif" font-size="8" font-style="italic">Rest</text>
+            </g>
+
+            <!-- Ambient dots -->
+            <g fill="rgba(255,255,255,0.12)">
+              <circle cx="60" cy="50" r="1"/>
+              <circle cx="680" cy="60" r="1.2"/>
+              <circle cx="650" cy="320" r="1"/>
+              <circle cx="40" cy="300" r="1.2"/>
+              <circle cx="490" cy="180" r="0.8"/>
+              <circle cx="80" cy="150" r="0.8"/>
+              <circle cx="300" cy="40" r="1"/>
+              <circle cx="600" cy="280" r="0.8"/>
+            </g>
+
+            <text x="350" y="345" text-anchor="middle" fill="rgba(138,132,144,0.5)" font-family="DM Sans, sans-serif" font-size="9" letter-spacing="1">CONCEPT ILLUSTRATION</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-symbol">◐</div>
+        <h4>Dialogue with each part</h4>
+        <p>
+          Each part has its own voice, its own memory, its own evolving personality.
+          Talk to your Protector. Sit with your Critic. Listen to your Dreamer.
+        </p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-symbol">◭</div>
+        <h4>Parts journaling</h4>
+        <p>
+          Reflective entries that belong to specific parts — not just a generic diary.
+          Track what each part is carrying, week after week.
+        </p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-symbol">◉</div>
+        <h4>Pattern recognition</h4>
+        <p>
+          InnerWorld surfaces themes across time — when a part shows up most, what it
+          tends to react to, how it's softening. Things you can't see day-to-day.
+        </p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-symbol">◈</div>
+        <h4>Practitioner mode</h4>
+        <p>
+          Therapists and coaches get a structured view of their clients' between-session work —
+          parts maps, reflection summaries, and progress they can review together.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- EXPERIENCE PREVIEW -->
 <section class="section-spacing reveal">
   <div class="container">
@@ -403,9 +733,9 @@ footer a:hover{color:var(--accent)}
       <div class="preview-text">
         <h2>A conversation that <em>remembers</em></h2>
         <p>
-          Unlike generic chatbots, InnerWorld builds a longitudinal relationship 
-          with each of your parts. It recalls what your Protector said last week. 
-          It notices when your Critic softens. It tracks growth you might not see yourself.
+          Unlike generic chatbots, InnerWorld builds a longitudinal relationship
+          with each of your parts. It remembers what they've said, notices when they shift,
+          and tracks growth you might not see yourself.
         </p>
         <div class="feature-tags">
           <span class="feature-tag">Longitudinal memory</span>
@@ -415,15 +745,49 @@ footer a:hover{color:var(--accent)}
         </div>
       </div>
       <div class="chat-mock">
-        <div class="chat-msg msg-user">I've been feeling anxious all day and I don't know why.</div>
-        <div class="chat-msg msg-part">
-          <div class="part-name">⟡ The Protector</div>
-          I think I do. Remember last Tuesday when we talked about that deadline? I've been carrying that weight since then. I didn't want you to forget.
+        <div class="parts-sidebar">
+          <div class="parts-sidebar-label">Your parts</div>
+          <div class="part-item">
+            <span class="part-dot" style="background:#d4a574"></span>
+            <span class="part-label">Protector</span>
+            <span class="part-meta">now</span>
+          </div>
+          <div class="part-item active">
+            <span class="part-dot" style="background:#7a9cb4"></span>
+            <span class="part-label">Critic</span>
+            <span class="part-meta">2m</span>
+          </div>
+          <div class="part-item">
+            <span class="part-dot" style="background:#b47a8a"></span>
+            <span class="part-label">Dreamer</span>
+            <span class="part-meta">1h</span>
+          </div>
+          <div class="part-item">
+            <span class="part-dot" style="background:#7ab48a"></span>
+            <span class="part-label">Inner Child</span>
+            <span class="part-meta">3d</span>
+          </div>
+          <div class="part-item muted">
+            <span class="part-dot" style="background:#8a8490"></span>
+            <span class="part-label">Planner</span>
+            <span class="part-meta">1w</span>
+          </div>
         </div>
-        <div class="chat-msg msg-user">I didn't realize you were still holding onto that.</div>
-        <div class="chat-msg msg-part">
-          <div class="part-name">⟡ The Protector</div>
-          That's why I'm here. I'd rather you feel anxious than unprepared. But maybe we can find a middle ground this time?
+        <div class="chat-thread">
+          <div class="chat-thread-header">
+            <span class="part-dot" style="background:#7a9cb4"></span>
+            <span>The Critic</span>
+          </div>
+          <div class="chat-msg msg-user">Why are you always so hard on me?</div>
+          <div class="chat-msg msg-part msg-critic">
+            <div class="part-name">⟡ The Critic</div>
+            Because I remember every time you got hurt for not being prepared. I'm not trying to punish you — I'm trying to keep that from happening again.
+          </div>
+          <div class="chat-msg msg-user">I never thought of it that way.</div>
+          <div class="chat-msg msg-part msg-critic">
+            <div class="part-name">⟡ The Critic</div>
+            Most people don't. They hear the voice and assume the worst. But I've been here longer than you remember.
+          </div>
         </div>
       </div>
     </div>
@@ -440,38 +804,38 @@ footer a:hover{color:var(--accent)}
       <div class="science-main">
         <h3>What is IFS?</h3>
         <p>
-          Internal Family Systems was developed by Dr. Richard Schwartz in the 1980s. 
-          The core insight: <span class="science-highlight">our minds naturally contain multiple "parts" — 
+          Internal Family Systems was developed by Dr. Richard Schwartz in the 1980s.
+          The core insight: <span class="science-highlight">our minds naturally contain multiple "parts" —
           sub-personalities with distinct feelings, perspectives, and roles.</span>
         </p>
         <p>
-          Rather than treating these parts as symptoms to eliminate, IFS works with them 
-          as a system — listening to what each part needs, understanding why it does what it does, 
+          Rather than treating these parts as symptoms to eliminate, IFS works with them
+          as a system — listening to what each part needs, understanding why it does what it does,
           and building harmony from within.
         </p>
         <p>
-          IFS has been recognized as an evidence-based practice by NREPP (National Registry 
-          of Evidence-based Programs and Practices) and is used by thousands of licensed 
+          IFS has been recognized as an evidence-based practice by NREPP (National Registry
+          of Evidence-based Programs and Practices) and is used by thousands of licensed
           therapists worldwide.
         </p>
       </div>
       <div class="science-points">
         <div class="science-point">
           <h4>◈ How InnerWorld applies IFS</h4>
-          <p>We translate the core IFS framework into an interactive AI experience — 
-          allowing you to name, dialogue with, and understand your parts in your own time 
+          <p>We translate the core IFS framework into an interactive AI experience —
+          allowing you to name, dialogue with, and understand your parts in your own time
           and space. It's not therapy. It's self-exploration guided by proven principles.</p>
         </div>
         <div class="science-point">
           <h4>◈ AI as facilitator, not therapist</h4>
-          <p>The AI doesn't diagnose, interpret, or prescribe. It holds space for your 
-          inner dialogue — asking the questions a skilled facilitator might ask, 
+          <p>The AI doesn't diagnose, interpret, or prescribe. It holds space for your
+          inner dialogue — asking the questions a skilled facilitator might ask,
           while your parts provide the answers only you can give.</p>
         </div>
         <div class="science-point">
           <h4>◈ Complementary to professional care</h4>
-          <p>InnerWorld is designed to work alongside therapy, not replace it. 
-          For those in therapy, it extends the work between sessions. 
+          <p>InnerWorld is designed to work alongside therapy, not replace it.
+          For those in therapy, it extends the work between sessions.
           For those not in therapy, it offers a structured entry point into self-understanding.</p>
         </div>
       </div>
@@ -487,28 +851,28 @@ footer a:hover{color:var(--accent)}
     <p class="section-sub">You'll share your deepest thoughts with InnerWorld. We take that trust seriously.</p>
     <div class="privacy-grid">
       <div class="privacy-item">
-        <span class="privacy-icon">🔒</span>
+        <span class="privacy-symbol">◈</span>
         <h4>Encrypted by default</h4>
         <p>All conversations are encrypted in transit and at rest. Your inner dialogue is protected at every layer.</p>
       </div>
       <div class="privacy-item">
-        <span class="privacy-icon">🚫</span>
+        <span class="privacy-symbol">◇</span>
         <h4>Never sold, never shared</h4>
         <p>Your data is never sold to third parties, never used for advertising, and never shared without your explicit consent.</p>
       </div>
       <div class="privacy-item">
-        <span class="privacy-icon">🤖</span>
+        <span class="privacy-symbol">◐</span>
         <h4>Not used to train AI</h4>
         <p>Your conversations are never used to train or improve AI models. Your inner world is not training data.</p>
       </div>
       <div class="privacy-item">
-        <span class="privacy-icon">🗑️</span>
+        <span class="privacy-symbol">◉</span>
         <h4>Delete anytime</h4>
         <p>You own your data. Export it, delete it, or leave — whenever you want, no questions asked.</p>
       </div>
     </div>
     <p class="privacy-note">
-      We're building privacy into the architecture, not bolting it on as an afterthought. 
+      We're building privacy into the architecture, not bolting it on as an afterthought.
       Detailed security documentation will be published before launch.
     </p>
   </div>
@@ -521,12 +885,24 @@ footer a:hover{color:var(--accent)}
     <div style="height:24px"></div>
     <div class="audience-grid">
       <div class="audience-card">
-        <h3>🌱 Individuals</h3>
-        <p>You're curious about your inner world. You've tried meditation, journaling, maybe therapy — and you want a daily companion that meets you where you are. No clinical jargon. Just honest, evolving self-dialogue.</p>
+        <h3>◐ Individuals</h3>
+        <p>You're curious about your inner world. You've tried meditation, journaling, maybe therapy — and you want a daily companion that meets you where you are.</p>
+        <ul>
+          <li>Name and dialogue with the parts you already feel</li>
+          <li>Build a private spatial map of your inner system</li>
+          <li>Watch patterns emerge over weeks and months</li>
+          <li>No clinical jargon, no diagnosis — just honest reflection</li>
+        </ul>
       </div>
       <div class="audience-card">
-        <h3>🔬 Practitioners</h3>
-        <p>You're a therapist, coach, or facilitator who works with parts. InnerWorld gives your clients a space to continue their inner work between sessions — with structured reflection and insights you can review together.</p>
+        <h3>◈ Practitioners</h3>
+        <p>You're a therapist, coach, or facilitator who works with parts. InnerWorld extends your work into the days between sessions.</p>
+        <ul>
+          <li>Clients continue parts work in a structured AI-guided space</li>
+          <li>Review session summaries and parts evolution before each meeting</li>
+          <li>See which parts your client engaged with and what shifted</li>
+          <li>Designed in collaboration with practicing IFS therapists</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -562,19 +938,19 @@ footer a:hover{color:var(--accent)}
     <div style="height:40px"></div>
     <div class="founder-card">
       <div class="founder-quote">
-        <p>I've spent years trying to understand my own inner world — through meditation, 
-        journaling, therapy, philosophy, and countless conversations with myself on long flights 
+        <p>I've spent years trying to understand my own inner world — through meditation,
+        journaling, therapy, philosophy, and countless conversations with myself on long flights
         and quiet nights.</p>
-        <p>What I found is that the most powerful breakthroughs didn't come from finding 
-        the "right" answer. They came from learning to listen to the different voices 
-        inside me — the part that protects, the part that criticizes, the part that 
+        <p>What I found is that the most powerful breakthroughs didn't come from finding
+        the "right" answer. They came from learning to listen to the different voices
+        inside me — the part that protects, the part that criticizes, the part that
         dreams — and realizing that each one has a reason for being there.</p>
-        <p>But this kind of inner work is hard to do alone. Therapy is invaluable but not 
-        always accessible. Journaling helps but doesn't talk back. Meditation quiets 
+        <p>But this kind of inner work is hard to do alone. Therapy is invaluable but not
+        always accessible. Journaling helps but doesn't talk back. Meditation quiets
         the mind but doesn't always help you understand what it's saying.</p>
-        <p>InnerWorld is my attempt to bridge that gap — to create a space where anyone can 
-        have meaningful conversations with the parts of themselves that usually go unheard. 
-        Not as a replacement for professional help, but as a daily companion for the 
+        <p>InnerWorld is my attempt to bridge that gap — to create a space where anyone can
+        have meaningful conversations with the parts of themselves that usually go unheard.
+        Not as a replacement for professional help, but as a daily companion for the
         ongoing work of being human.</p>
         <p>I'm building this because I needed it myself. And I suspect you might, too.</p>
       </div>
@@ -599,53 +975,75 @@ footer a:hover{color:var(--accent)}
       <div class="faq-item">
         <div class="faq-q">Is InnerWorld a replacement for therapy?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>No. InnerWorld is a self-exploration tool, not a clinical service. It doesn't diagnose, 
-          treat, or provide medical advice. Think of it as a structured space for self-reflection — 
-          like journaling with depth, guided by proven psychological principles. If you're experiencing 
-          mental health challenges, we encourage you to work with a licensed professional. 
+          <p>No. InnerWorld is a self-exploration tool, not a clinical service. It doesn't diagnose,
+          treat, or provide medical advice. Think of it as a structured space for self-reflection —
+          like journaling with depth, guided by proven psychological principles. If you're experiencing
+          mental health challenges, we encourage you to work with a licensed professional.
           InnerWorld is designed to complement that work, not replace it.</p>
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">How does the AI know what my "parts" should say?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>The AI doesn't invent your parts — you define them. You name each part, describe its role 
-          and personality, and the AI uses that context to facilitate dialogue. Over time, as you 
-          interact more, the AI builds a richer understanding of each part based on what you've shared. 
+          <p>The AI doesn't invent your parts — you define them. You name each part, describe its role
+          and personality, and the AI uses that context to facilitate dialogue. Over time, as you
+          interact more, the AI builds a richer understanding of each part based on what you've shared.
           The responses are always grounded in your own input, not generic templates.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How much will InnerWorld cost?<span class="faq-arrow">▼</span></div>
+        <div class="faq-a">
+          <p>We're planning four tiers so InnerWorld meets you wherever you are:</p>
+          <ul class="pricing-tiers">
+            <li><strong>Free</strong> — name your first few parts and try basic dialogue. A gentle way to see if parts work feels right for you.</li>
+            <li><strong>Pro</strong> — daily companion with full longitudinal memory, the spatial parts map, and pattern recognition over time.</li>
+            <li><strong>Deep</strong> — for those doing serious inner work. Extended reflection features, deeper parts journaling, and richer insights across your history.</li>
+            <li><strong>Practitioner</strong> — for therapists, coaches, and facilitators. Client management, session review, and tools designed with practicing IFS therapists.</li>
+          </ul>
+          <p style="margin-top:14px">Final pricing will be shared before launch. Waitlist members will get early-bird rates and the chance to help shape the tiers.</p>
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">What happens to my data?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>Your conversations are encrypted, never sold, and never used to train AI models. 
-          You can export or delete your data at any time. We're committed to making our privacy 
+          <p>Your conversations are encrypted, never sold, and never used to train AI models.
+          You can export or delete your data at any time. We're committed to making our privacy
           practices transparent — detailed documentation will be available before launch.</p>
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">Do I need to know about IFS or psychology to use this?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>Not at all. InnerWorld is designed for anyone curious about self-understanding. 
-          The onboarding gently introduces the concept of "parts" in plain language. 
-          If you've ever noticed conflicting feelings — like wanting to take a risk but 
+          <p>Not at all. InnerWorld is designed for anyone curious about self-understanding.
+          The onboarding gently introduces the concept of "parts" in plain language.
+          If you've ever noticed conflicting feelings — like wanting to take a risk but
           also wanting to play it safe — you already understand the basics.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if a part says something disturbing or upsetting?<span class="faq-arrow">▼</span></div>
+        <div class="faq-a">
+          <p>Difficult feelings are part of inner work — that's often where the real understanding lives.
+          InnerWorld is designed to hold space for hard moments without escalating them, and to gently
+          encourage professional support when something needs more than self-reflection can offer.
+          If you're in crisis, please reach out to a licensed professional or a local crisis line.</p>
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">When will InnerWorld be available?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>We're currently in early development. Waitlist members will get first access 
-          to the beta, along with the opportunity to shape the product through feedback. 
+          <p>We're currently in early development. Waitlist members will get first access
+          to the beta, along with the opportunity to shape the product through feedback.
           Join the waitlist to stay updated.</p>
         </div>
       </div>
       <div class="faq-item">
         <div class="faq-q">I'm a therapist. How can InnerWorld help my practice?<span class="faq-arrow">▼</span></div>
         <div class="faq-a">
-          <p>InnerWorld offers a practitioner mode where your clients can continue parts work 
-          between sessions in a structured, AI-guided environment. You'll be able to review 
-          session summaries and track client progress over time. We're designing this in 
+          <p>InnerWorld offers a practitioner mode where your clients can continue parts work
+          between sessions in a structured, AI-guided environment. You'll be able to review
+          session summaries and track client progress over time. We're designing this in
           collaboration with practicing therapists — your input is welcome.</p>
         </div>
       </div>
@@ -659,11 +1057,10 @@ footer a:hover{color:var(--accent)}
     <div class="waitlist-box">
       <h2>Be among the first</h2>
       <p>
-        InnerWorld is in early development. Join the waitlist to get early access, 
-        shape the product, and be part of a community building 
+        InnerWorld is in early development. Join the waitlist to get early access,
+        shape the product, and be part of a community building
         the future of self-understanding.
       </p>
-      <!-- REPLACE THIS LINK with your Tally form URL -->
       <a href="https://tally.so/r/68v60Y" target="_blank" class="btn btn-primary">
         Join the Waitlist →
       </a>
@@ -678,7 +1075,15 @@ footer a:hover{color:var(--accent)}
 
 <footer>
   <div class="container">
-    <p>&copy; 2026 InnerWorld · Built with intention · <a href="mailto:nmnstalis@gmail.com">Contact</a></p>
+    <div class="footer-content">
+      <p>&copy; 2026 InnerWorld · Built with intention</p>
+      <div class="footer-links">
+        <a href="#science">Science</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a href="mailto:nmnstalis@gmail.com">Contact</a>
+      </div>
+    </div>
   </div>
 </footer>
 
