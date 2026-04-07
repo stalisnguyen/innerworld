@@ -63,7 +63,7 @@ body{
 }
 
 .container{max-width:var(--max-w);margin:0 auto;padding:0 24px;position:relative;z-index:1}
-.section-spacing{padding:100px 0}
+.section-spacing{padding:64px 0}
 
 nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between}
 .logo{
@@ -81,7 +81,13 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
   letter-spacing:0.04em;text-transform:uppercase;transition:color 0.3s;
 }
 .nav-links a:hover{color:var(--accent)}
-.nav-links .btn{font-size:0.82rem;padding:8px 20px;text-transform:uppercase;letter-spacing:0.04em}
+.nav-links a.btn-primary{
+  color:var(--bg);
+  font-size:0.82rem;padding:8px 20px;
+  text-transform:uppercase;letter-spacing:0.04em;
+  font-weight:600;
+}
+.nav-links a.btn-primary:hover{color:var(--bg)}
 
 .btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -116,12 +122,12 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 }
 .section-sub{
   text-align:center;color:var(--text-dim);
-  font-size:0.95rem;margin-bottom:60px;
+  font-size:0.95rem;margin-bottom:44px;
   font-weight:300;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.7;
 }
 
 /* Hero */
-.hero{padding:100px 0 80px;text-align:center;position:relative}
+.hero{padding:72px 0 56px;text-align:center;position:relative}
 .hero-badge{
   display:inline-block;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;
   color:var(--accent);background:var(--accent-soft);
@@ -144,7 +150,7 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 .cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 
 /* Problem */
-.problem{padding:80px 0;text-align:center}
+.problem{padding:56px 0;text-align:center}
 .problem blockquote{
   font-family:var(--serif);font-size:clamp(1.3rem,3vw,1.8rem);
   font-style:italic;color:var(--text-dim);max-width:700px;margin:0 auto;line-height:1.6;
@@ -393,7 +399,7 @@ nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between
 }
 
 /* Waitlist */
-.waitlist{padding:100px 0 60px;text-align:center}
+.waitlist{padding:64px 0 40px;text-align:center}
 .waitlist-box{
   background:linear-gradient(135deg,rgba(196,166,122,0.06),rgba(122,156,180,0.04));
   border:1px solid rgba(196,166,122,0.12);border-radius:24px;
@@ -882,7 +888,7 @@ footer p{color:var(--text-muted);font-size:0.8rem;font-weight:300}
 <section class="section-spacing reveal">
   <div class="container">
     <h2 class="section-title">Built for</h2>
-    <div style="height:24px"></div>
+
     <div class="audience-grid">
       <div class="audience-card">
         <h3>◐ Individuals</h3>
@@ -912,7 +918,7 @@ footer p{color:var(--text-muted);font-size:0.8rem;font-weight:300}
 <section class="section-spacing reveal">
   <div class="container">
     <h2 class="section-title">Why InnerWorld is different</h2>
-    <div style="height:24px"></div>
+
     <div class="differ-items">
       <div class="differ-item">
         <h4>Not a chatbot</h4>
@@ -935,7 +941,7 @@ footer p{color:var(--text-muted);font-size:0.8rem;font-weight:300}
   <div class="container">
     <p class="section-label">Why This Exists</p>
     <h2 class="section-title">A letter from the founder</h2>
-    <div style="height:40px"></div>
+
     <div class="founder-card">
       <div class="founder-quote">
         <p>I've spent years trying to understand my own inner world — through meditation,
@@ -970,7 +976,7 @@ footer p{color:var(--text-muted);font-size:0.8rem;font-weight:300}
   <div class="container">
     <p class="section-label">Common Questions</p>
     <h2 class="section-title">FAQ</h2>
-    <div style="height:40px"></div>
+
     <div class="faq-list">
       <div class="faq-item">
         <div class="faq-q">Is InnerWorld a replacement for therapy?<span class="faq-arrow">▼</span></div>
